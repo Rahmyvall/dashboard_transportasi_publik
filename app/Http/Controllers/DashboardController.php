@@ -8,6 +8,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        // You can pass data to the view here if needed
+        $data = [
+            'title' => 'Dashboard'
+        ];
+
+        return view('dashboard', $data);
     }
 }
