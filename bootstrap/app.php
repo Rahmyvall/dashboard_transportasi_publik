@@ -12,9 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware) {
-        //
+
+        // ✅ TAMBAHKAN INI UNTUK MULTI LANGUAGE
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

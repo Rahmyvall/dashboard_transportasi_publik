@@ -1,54 +1,301 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 
 <head>
-
     <meta charset="utf-8" />
-    <title>Starter page | Upcube - Admin & Dashboard Template</title>
+    <title>Dashboard Monitoring Transportasi Publik</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesdesign" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('backend/assets/images/favicon.ico')}}">
+    <meta content="Dashboard Monitoring Transportasi Publik" name="description" />
+    <meta content="Transportasi Publik" name="author" />
 
-    <!-- Bootstrap Css -->
-    <link href="{{asset('backend/assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet"
-        type="text/css" />
-    <!-- Icons Css -->
-    <link href="{{asset('backend/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="{{asset('backend/assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- ICONS -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
 
+    <!-- BOOTSTRAP (WAJIB STABLE) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- LOCAL TEMPLATE (SAFE LOAD) -->
+    <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/assets/css/app.min.css') }}" rel="stylesheet">
+    <style>
+    .stat-card {
+        border-radius: 14px;
+        border: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 24px;
+    }
+
+    .map-box {
+        height: 360px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #eef5ff, #f8fbff);
+        border: 1px dashed #9bb7d4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .bw-toggle-active {
+        background: #111111 !important;
+        color: #ffffff !important;
+        border-radius: 50%;
+    }
+
+    body.bw-dark {
+        background: #000000 !important;
+        color: #ffffff !important;
+    }
+
+    body.bw-dark #page-topbar,
+    body.bw-dark .navbar-header,
+    body.bw-dark .vertical-menu,
+    body.bw-dark .page-content,
+    body.bw-dark .main-content,
+    body.bw-dark .footer,
+    body.bw-dark .right-bar,
+    body.bw-dark .dropdown-menu,
+    body.bw-dark .card,
+    body.bw-dark .stat-card {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border-color: #2b2b2b !important;
+    }
+
+    body.bw-dark a,
+    body.bw-dark .header-item,
+    body.bw-dark .metismenu li a,
+    body.bw-dark .menu-title,
+    body.bw-dark .page-title-box h4,
+    body.bw-dark .breadcrumb-item,
+    body.bw-dark .breadcrumb-item a,
+    body.bw-dark .text-muted,
+    body.bw-dark .dropdown-item,
+    body.bw-dark h1,
+    body.bw-dark h2,
+    body.bw-dark h3,
+    body.bw-dark h4,
+    body.bw-dark h5,
+    body.bw-dark h6,
+    body.bw-dark p,
+    body.bw-dark span,
+    body.bw-dark td,
+    body.bw-dark th {
+        color: #ffffff !important;
+    }
+
+    body.bw-dark .sub-menu li a {
+        color: #dcdcdc !important;
+    }
+
+    body.bw-dark .form-control {
+        background: #111111 !important;
+        color: #ffffff !important;
+        border-color: #333333 !important;
+    }
+
+    body.bw-dark .form-control::placeholder {
+        color: #bdbdbd !important;
+    }
+
+    body.bw-dark .dropdown-item:hover,
+    body.bw-dark .dropdown-icon-item:hover,
+    body.bw-dark .notification-item:hover {
+        background: #151515 !important;
+    }
+
+    body.bw-dark .map-box {
+        background: #080808 !important;
+        border-color: #ffffff !important;
+    }
+
+    .dashboard-hero {
+        background: linear-gradient(135deg, #0B63B6 0%, #052B58 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-hero::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        right: -80px;
+        top: -100px;
+    }
+
+    .kpi-card {
+        transition: all 0.25s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .icon-box {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .danger-card {
+        border-left: 5px solid #dc3545 !important;
+    }
+
+    .map-box {
+        border: 1px dashed #b5cce3;
+    }
+
+    .alert-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        margin-bottom: 12px;
+    }
+
+    .alert-item.danger {
+        background: #fff1f1;
+        color: #842029;
+    }
+
+    .alert-item.warning {
+        background: #fff8e6;
+        color: #7a5200;
+    }
+
+    .alert-item.info {
+        background: #eef7ff;
+        color: #055160;
+    }
+
+    .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+    .status-row:last-child {
+        border-bottom: none;
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+    .chart-placeholder {
+        height: 260px;
+        background: linear-gradient(135deg, #f3f6f8, #eef5ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px dashed #b5cce3;
+    }
+
+    .route-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+    }
+
+    .menu-link {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #495057;
+        transition: 0.2s;
+    }
+
+    .menu-link:hover {
+        background: #f1f5f9;
+        color: #0d6efd;
+    }
+
+    .sub-menu li a {
+        padding: 8px 12px;
+        display: block;
+        border-radius: 8px;
+        color: #6c757d;
+        transition: 0.2s;
+    }
+
+    .sub-menu li a:hover {
+        background: #eef2ff;
+        color: #0d6efd;
+        padding-left: 16px;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+    </style>
 </head>
 
 <body data-topbar="dark">
 
-    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
-
-    <!-- Begin page -->
     <div id="layout-wrapper">
 
-
+        <!-- Header -->
         <header id="page-topbar">
             <div class="navbar-header">
                 <div class="d-flex">
-                    <!-- LOGO -->
                     <div class="navbar-brand-box">
-                        <a href="index.html" class="logo logo-dark">
+                        <a href="{{ url('/dashboard') }}" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="assets/images/logo-sm.png" alt="logo-sm" height="22">
+                                <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="assets/images/logo-dark.png" alt="logo-dark" height="20">
+                                <img src="{{ asset('backend/assets/images/logo-dark.png') }}" alt="logo-dark"
+                                    height="20">
                             </span>
                         </a>
 
-                        <a href="index.html" class="logo logo-light">
+                        <a href="{{ url('/dashboard') }}" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="assets/images/logo-sm.png" alt="logo-sm-light" height="22">
+                                <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm-light"
+                                    height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="assets/images/logo-light.png" alt="logo-light" height="20">
+                                <img src="{{ asset('backend/assets/images/logo-light.png') }}" alt="logo-light"
+                                    height="20">
                             </span>
                         </a>
                     </div>
@@ -58,150 +305,15 @@
                         <i class="ri-menu-2-line align-middle"></i>
                     </button>
 
-                    <!-- App Search-->
                     <form class="app-search d-none d-lg-block">
                         <div class="position-relative">
-                            <input type="text" class="form-control" placeholder="Search...">
+                            <input type="text" class="form-control" placeholder="Cari data transportasi...">
                             <span class="ri-search-line"></span>
                         </div>
                     </form>
-
-                    <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
-                        <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
-                            aria-haspopup="false" aria-expanded="false">
-                            Mega Menu
-                            <i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-megamenu">
-                            <div class="row">
-                                <div class="col-sm-8">
-
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h5 class="font-size-14">UI Components</h5>
-                                            <ul class="list-unstyled megamenu-list">
-                                                <li>
-                                                    <a href="javascript:void(0);">Lightbox</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Range Slider</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Sweet Alert</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Rating</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Forms</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Tables</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Charts</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <h5 class="font-size-14">Applications</h5>
-                                            <ul class="list-unstyled megamenu-list">
-                                                <li>
-                                                    <a href="javascript:void(0);">Ecommerce</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Calendar</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Email</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Projects</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Tasks</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Contacts</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="col-md-4">
-                                            <h5 class="font-size-14">Extra Pages</h5>
-                                            <ul class="list-unstyled megamenu-list">
-                                                <li>
-                                                    <a href="javascript:void(0);">Light Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Compact Sidebar</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Horizontal layout</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Maintenance</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Coming Soon</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Timeline</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">FAQs</a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <h5 class="font-size-14">UI Components</h5>
-                                            <ul class="list-unstyled megamenu-list">
-                                                <li>
-                                                    <a href="javascript:void(0);">Lightbox</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Range Slider</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Sweet Alert</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Rating</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Forms</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Tables</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);">Charts</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="col-sm-5">
-                                            <div>
-                                                <img src="assets/images/megamenu-img.png" alt="megamenu-img"
-                                                    class="img-fluid mx-auto d-block">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
 
                 <div class="d-flex">
-
                     <div class="dropdown d-inline-block d-lg-none ms-2">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
@@ -210,104 +322,24 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-search-dropdown">
-
                             <form class="p-3">
                                 <div class="mb-3 m-0">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search ...">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="submit"><i
-                                                    class="ri-search-line"></i></button>
-                                        </div>
+                                        <input type="text" class="form-control" placeholder="Cari data transportasi...">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="ri-search-line"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
 
-                    <div class="dropdown d-none d-sm-inline-block">
-                        <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <img class="" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12">
-                                <span class="align-middle">Spanish</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12">
-                                <span class="align-middle">German</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12">
-                                <span class="align-middle">Italian</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12">
-                                <span class="align-middle">Russian</span>
-                            </a>
-                        </div>
-                    </div>
-
                     <div class="dropdown d-none d-lg-inline-block ms-1">
-                        <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="ri-apps-2-line"></i>
+                        <button type="button" class="btn header-item noti-icon waves-effect" id="bw-theme-toggle"
+                            title="Black / White Mode">
+                            <i class="ri-moon-line" id="bw-theme-icon"></i>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                            <div class="px-lg-2">
-                                <div class="row g-0">
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/github.png" alt="Github">
-                                            <span>GitHub</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/bitbucket.png" alt="bitbucket">
-                                            <span>Bitbucket</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/dribbble.png" alt="dribbble">
-                                            <span>Dribbble</span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="row g-0">
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/dropbox.png" alt="dropbox">
-                                            <span>Dropbox</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/mail_chimp.png" alt="mail_chimp">
-                                            <span>Mail Chimp</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="assets/images/brands/slack.png" alt="slack">
-                                            <span>Slack</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="dropdown d-none d-lg-inline-block ms-1">
@@ -315,7 +347,6 @@
                             <i class="ri-fullscreen-line"></i>
                         </button>
                     </div>
-
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -327,80 +358,50 @@
                             <div class="p-3">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h6 class="m-0"> Notifications </h6>
+                                        <h6 class="m-0">Notifikasi</h6>
                                     </div>
                                     <div class="col-auto">
-                                        <a href="#!" class="small"> View All</a>
+                                        <a href="{{ url('/monitoring/notifikasi-alert') }}" class="small">Lihat
+                                            Semua</a>
                                     </div>
                                 </div>
                             </div>
+
                             <div data-simplebar style="max-height: 230px;">
-                                <a href="" class="text-reset notification-item">
+                                <a href="{{ url('/monitoring/keterlambatan') }}" class="text-reset notification-item">
                                     <div class="d-flex">
                                         <div class="avatar-xs me-3">
-                                            <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                <i class="ri-shopping-cart-line"></i>
+                                            <span class="avatar-title bg-warning rounded-circle font-size-16">
+                                                <i class="ri-time-line"></i>
                                             </span>
                                         </div>
                                         <div class="flex-1">
-                                            <h6 class="mb-1">Your order is placed</h6>
+                                            <h6 class="mb-1">Keterlambatan armada</h6>
                                             <div class="font-size-12 text-muted">
-                                                <p class="mb-1">If several languages coalesce the grammar</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <img src="assets/images/users/avatar-3.jpg"
-                                            class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                        <div class="flex-1">
-                                            <h6 class="mb-1">James Lemire</h6>
-                                            <div class="font-size-12 text-muted">
-                                                <p class="mb-1">It will seem like simplified English.</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1 hours ago</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="" class="text-reset notification-item">
-                                    <div class="d-flex">
-                                        <div class="avatar-xs me-3">
-                                            <span class="avatar-title bg-success rounded-circle font-size-16">
-                                                <i class="ri-checkbox-circle-line"></i>
-                                            </span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <h6 class="mb-1">Your item is shipped</h6>
-                                            <div class="font-size-12 text-muted">
-                                                <p class="mb-1">If several languages coalesce the grammar</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
+                                                <p class="mb-1">3 armada terlambat dari jadwal.</p>
+                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 5 menit lalu</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
 
-                                <a href="" class="text-reset notification-item">
+                                <a href="{{ url('/monitoring/insiden-perjalanan') }}"
+                                    class="text-reset notification-item">
                                     <div class="d-flex">
-                                        <img src="assets/images/users/avatar-4.jpg"
-                                            class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                        <div class="avatar-xs me-3">
+                                            <span class="avatar-title bg-danger rounded-circle font-size-16">
+                                                <i class="ri-alert-line"></i>
+                                            </span>
+                                        </div>
                                         <div class="flex-1">
-                                            <h6 class="mb-1">Salena Layfield</h6>
+                                            <h6 class="mb-1">Insiden perjalanan</h6>
                                             <div class="font-size-12 text-muted">
-                                                <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
-                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1 hours ago</p>
+                                                <p class="mb-1">Ada laporan insiden pada rute utama.</p>
+                                                <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 10 menit lalu</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
-                            </div>
-                            <div class="p-2 border-top">
-                                <div class="d-grid">
-                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                                        <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -408,399 +409,593 @@
                     <div class="dropdown d-inline-block user-dropdown">
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
-                                alt="Header Avatar">
-                            <span class="d-none d-xl-inline-block ms-1">Julia</span>
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ asset('backend/assets/images/users/avatar-1.jpg') }}" alt="Header Avatar">
+                            <span class="d-none d-xl-inline-block ms-1">Admin</span>
                             <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <!-- item-->
-                            <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Profile</a>
-                            <a class="dropdown-item" href="#"><i class="ri-wallet-2-line align-middle me-1"></i> My
-                                Wallet</a>
-                            <a class="dropdown-item d-block" href="#"><span
-                                    class="badge bg-success float-end mt-1">11</span><i
-                                    class="ri-settings-2-line align-middle me-1"></i> Settings</a>
-                            <a class="dropdown-item" href="#"><i class="ri-lock-unlock-line align-middle me-1"></i> Lock
-                                screen</a>
+                            <a class="dropdown-item" href="{{ url('/profile') }}">
+                                <i class="ri-user-line align-middle me-1"></i> Profile
+                            </a>
+                            <a class="dropdown-item" href="{{ url('/pengaturan/user') }}">
+                                <i class="ri-settings-2-line align-middle me-1"></i> Pengaturan
+                            </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i
-                                    class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
+                            <a class="dropdown-item text-danger" href="{{ url('/logout') }}">
+                                <i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout
+                            </a>
                         </div>
                     </div>
-
-                    <div class="dropdown d-inline-block">
-                        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
-                            <i class="ri-settings-2-line"></i>
-                        </button>
-                    </div>
-
                 </div>
             </div>
         </header>
 
-        <!-- ========== Left Sidebar Start ========== -->
+        <!-- Left Sidebar Start -->
         <div class="vertical-menu">
-
             <div data-simplebar class="h-100">
 
-                <!-- User details -->
-                <div class="user-profile text-center mt-3">
-                    <div class="">
-                        <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-md rounded-circle">
-                    </div>
+                {{-- PROFILE --}}
+                <div class="user-profile text-center py-4 px-3 border-bottom">
+
+                    <img src="{{ asset('backend/assets/images/users/avatar-1.jpg') }}"
+                        class="avatar-md rounded-circle shadow-sm border">
+
                     <div class="mt-3">
-                        <h4 class="font-size-16 mb-1">Julia Hudda</h4>
-                        <span class="text-muted"><i
-                                class="ri-record-circle-line align-middle font-size-14 text-success"></i> Online</span>
+                        <h6 class="mb-0 fw-semibold">{{ __('Admin Transportasi') }}</h6>
+                        <small class="text-muted d-flex justify-content-center align-items-center gap-1 mt-1">
+                            <span class="status-dot bg-success"></span>
+                            Online
+                        </small>
                     </div>
+
                 </div>
 
-                <!--- Sidemenu -->
-                <div id="sidebar-menu">
-                    <!-- Left Menu Start -->
+                {{-- MENU --}}
+                <div id="sidebar-menu" class="px-2 py-3">
+
                     <ul class="metismenu list-unstyled" id="side-menu">
-                        <li class="menu-title">Menu</li>
 
-                        <li>
-                            <a href="index.html" class="waves-effect">
-                                <i class="ri-dashboard-line"></i><span
-                                    class="badge rounded-pill bg-success float-end">3</span>
-                                <span>Dashboard</span>
-                            </a>
+                        {{-- TITLE --}}
+                        <li class="menu-title px-3 mt-2 mb-2 text-uppercase small text-muted">
+                            {{ __('Menu Transportasi') }}
                         </li>
 
+                        {{-- ================= DASHBOARD ================= --}}
                         <li>
-                            <a href="calendar.html" class=" waves-effect">
-                                <i class="ri-calendar-2-line"></i>
-                                <span>Calendar</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-dashboard-line me-2"></i>
+                                <span>{{ __('Dashboard') }}</span>
+                                <span class="badge bg-primary ms-auto">6</span>
                             </a>
-                        </li>
 
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-mail-send-line"></i>
-                                <span>Email</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="email-inbox.html">Inbox</a></li>
-                                <li><a href="email-read.html">Read Email</a></li>
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/dashboard') }}">Ringkasan Dashboard</a></li>
+                                <li><a href="{{ url('/dashboard/armada-aktif') }}">Armada Aktif</a></li>
+                                <li><a href="{{ url('/dashboard/perjalanan-hari-ini') }}">Perjalanan Hari Ini</a></li>
+                                <li><a href="{{ url('/dashboard/jumlah-penumpang') }}">Jumlah Penumpang</a></li>
+                                <li><a href="{{ url('/dashboard/jumlah-insiden') }}">Insiden</a></li>
+                                <li><a href="{{ url('/dashboard/peta-realtime-armada') }}">Peta Realtime</a></li>
                             </ul>
                         </li>
 
+                        {{-- ================= MASTER ================= --}}
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-layout-3-line"></i>
-                                <span>Layouts</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-database-2-line me-2"></i>
+                                <span>Data Master</span>
+                                <span class="dot bg-primary ms-auto"></span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow">Vertical</a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="layouts-dark-sidebar.html">Dark Sidebar</a></li>
-                                        <li><a href="layouts-compact-sidebar.html">Compact Sidebar</a></li>
-                                        <li><a href="layouts-icon-sidebar.html">Icon Sidebar</a></li>
-                                        <li><a href="layouts-boxed.html">Boxed Layout</a></li>
-                                        <li><a href="layouts-preloader.html">Preloader</a></li>
-                                        <li><a href="layouts-colored-sidebar.html">Colored Sidebar</a></li>
-                                    </ul>
-                                </li>
 
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow">Horizontal</a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="layouts-horizontal.html">Horizontal</a></li>
-                                        <li><a href="layouts-hori-topbar-light.html">Topbar light</a></li>
-                                        <li><a href="layouts-hori-boxed-width.html">Boxed width</a></li>
-                                        <li><a href="layouts-hori-preloader.html">Preloader</a></li>
-                                        <li><a href="layouts-hori-colored-header.html">Colored Header</a></li>
-                                    </ul>
-                                </li>
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/operator') }}">Operator</a></li>
+                                <li><a href="{{ url('/armada') }}">Armada</a></li>
+                                <li><a href="{{ url('/pengemudi') }}">Pengemudi</a></li>
+                                <li><a href="{{ url('/jenis-transportasi') }}">Jenis Transportasi</a></li>
+                                <li><a href="{{ url('/rute') }}">Rute</a></li>
+                                <li><a href="{{ url('/halte') }}">Halte</a></li>
                             </ul>
                         </li>
 
-                        <li class="menu-title">Pages</li>
-
+                        {{-- ================= OPERASIONAL ================= --}}
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-account-circle-line"></i>
-                                <span>Authentication</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-bus-line me-2"></i>
+                                <span>Operasional</span>
+                                <span class="dot bg-success ms-auto"></span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="auth-login.html">Login</a></li>
-                                <li><a href="auth-register.html">Register</a></li>
-                                <li><a href="auth-recoverpw.html">Recover Password</a></li>
-                                <li><a href="auth-lock-screen.html">Lock Screen</a></li>
+
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/jadwal-operasional') }}">Jadwal Operasional</a></li>
+                                <li><a href="{{ url('/perjalanan-aktif') }}">Perjalanan Aktif</a></li>
+                                <li><a href="{{ url('/riwayat-perjalanan') }}">Riwayat Perjalanan</a></li>
+                                <li><a href="{{ url('/gps-tracking') }}">GPS Tracking</a></li>
                             </ul>
                         </li>
 
+                        {{-- ================= MONITORING ================= --}}
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-profile-line"></i>
-                                <span>Utility</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-radar-line me-2"></i>
+                                <span>Monitoring</span>
+                                <span class="badge bg-danger ms-auto">5</span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="pages-starter.html">Starter Page</a></li>
-                                <li><a href="pages-timeline.html">Timeline</a></li>
-                                <li><a href="pages-directory.html">Directory</a></li>
-                                <li><a href="pages-invoice.html">Invoice</a></li>
-                                <li><a href="pages-404.html">Error 404</a></li>
-                                <li><a href="pages-500.html">Error 500</a></li>
+
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/monitoring/posisi-armada') }}">Posisi Armada</a></li>
+                                <li><a href="{{ url('/monitoring/keterlambatan') }}">Keterlambatan</a></li>
+                                <li><a href="{{ url('/monitoring/kepadatan-penumpang') }}">Kepadatan</a></li>
+                                <li><a href="{{ url('/monitoring/insiden-perjalanan') }}">Insiden</a></li>
+                                <li><a href="{{ url('/monitoring/notifikasi-alert') }}">Alert</a></li>
                             </ul>
                         </li>
 
-                        <li class="menu-title">Components</li>
-
+                        {{-- ================= LAPORAN ================= --}}
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-pencil-ruler-2-line"></i>
-                                <span>UI Elements</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-file-chart-line me-2"></i>
+                                <span>Laporan</span>
+                                <span class="dot bg-warning ms-auto"></span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="ui-alerts.html">Alerts</a></li>
-                                <li><a href="ui-buttons.html">Buttons</a></li>
-                                <li><a href="ui-cards.html">Cards</a></li>
-                                <li><a href="ui-carousel.html">Carousel</a></li>
-                                <li><a href="ui-dropdowns.html">Dropdowns</a></li>
-                                <li><a href="ui-grid.html">Grid</a></li>
-                                <li><a href="ui-images.html">Images</a></li>
-                                <li><a href="ui-lightbox.html">Lightbox</a></li>
-                                <li><a href="ui-modals.html">Modals</a></li>
-                                <li><a href="ui-offcanvas.html">Offcavas</a></li>
-                                <li><a href="ui-progressbars.html">Progress Bars</a></li>
-                                <li><a href="ui-tabs-accordions.html">Tabs & Accordions</a></li>
-                                <li><a href="ui-typography.html">Typography</a></li>
-                                <li><a href="ui-video.html">Video</a></li>
-                                <li><a href="ui-general.html">General</a></li>
 
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/laporan/perjalanan') }}">Perjalanan</a></li>
+                                <li><a href="{{ url('/laporan/penumpang') }}">Penumpang</a></li>
+                                <li><a href="{{ url('/laporan/insiden') }}">Insiden</a></li>
+                                <li><a href="{{ url('/laporan/performa-rute') }}">Performa Rute</a></li>
+                                <li><a href="{{ url('/laporan/perawatan-armada') }}">Perawatan Armada</a></li>
                             </ul>
                         </li>
 
+                        {{-- ================= SETTINGS ================= --}}
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-vip-crown-2-line"></i>
-                                <span>Advanced UI</span>
+                            <a class="has-arrow waves-effect menu-link">
+                                <i class="ri-settings-3-line me-2"></i>
+                                <span>Pengaturan</span>
                             </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="advance-rangeslider.html">Range Slider</a></li>
-                                <li><a href="advance-roundslider.html">Round Slider</a></li>
-                                <li><a href="advance-session-timeout.html">Session Timeout</a></li>
-                                <li><a href="advance-sweet-alert.html">Sweetalert 2</a></li>
-                                <li><a href="advance-rating.html">Rating</a></li>
-                                <li><a href="advance-notifications.html">Notifications</a></li>
-                            </ul>
-                        </li>
 
-                        <li>
-                            <a href="javascript: void(0);" class="waves-effect">
-                                <i class="ri-eraser-fill"></i>
-                                <span class="badge rounded-pill bg-danger float-end">8</span>
-                                <span>Forms</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="form-elements.html">Form Elements</a></li>
-                                <li><a href="form-validation.html">Form Validation</a></li>
-                                <li><a href="form-advanced.html">Form Advanced Plugins</a></li>
-                                <li><a href="form-editors.html">Form Editors</a></li>
-                                <li><a href="form-uploads.html">Form File Upload</a></li>
-                                <li><a href="form-xeditable.html">Form X-editable</a></li>
-                                <li><a href="form-wizard.html">Form Wizard</a></li>
-                                <li><a href="form-mask.html">Form Mask</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-table-2"></i>
-                                <span>Tables</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="tables-basic.html">Basic Tables</a></li>
-                                <li><a href="tables-datatable.html">Data Tables</a></li>
-                                <li><a href="tables-responsive.html">Responsive Table</a></li>
-                                <li><a href="tables-editable.html">Editable Table</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Charts</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="charts-apex.html">Apex Charts</a></li>
-                                <li><a href="charts-chartjs.html">Chartjs Charts</a></li>
-                                <li><a href="charts-flot.html">Flot Charts</a></li>
-                                <li><a href="charts-knob.html">Jquery Knob Charts</a></li>
-                                <li><a href="charts-sparkline.html">Sparkline Charts</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-brush-line"></i>
-                                <span>Icons</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="icons-remix.html">Remix Icons</a></li>
-                                <li><a href="icons-materialdesign.html">Material Design</a></li>
-                                <li><a href="icons-dripicons.html">Dripicons</a></li>
-                                <li><a href="icons-fontawesome.html">Font awesome 5</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-map-pin-line"></i>
-                                <span>Maps</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="maps-google.html">Google Maps</a></li>
-                                <li><a href="maps-vector.html">Vector Maps</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="ri-share-line"></i>
-                                <span>Multi Level</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="javascript: void(0);">Level 1.1</a></li>
-                                <li><a href="javascript: void(0);" class="has-arrow">Level 1.2</a>
-                                    <ul class="sub-menu" aria-expanded="true">
-                                        <li><a href="javascript: void(0);">Level 2.1</a></li>
-                                        <li><a href="javascript: void(0);">Level 2.2</a></li>
-                                    </ul>
-                                </li>
+                            <ul class="sub-menu">
+                                <li><a href="{{ url('/user') }}">User</a></li>
+                                <li><a href="{{ url('/role') }}">Role</a></li>
+                                <li><a href="{{ url('/hak-akses') }}">Hak Akses</a></li>
                             </ul>
                         </li>
 
                     </ul>
+
                 </div>
-                <!-- Sidebar -->
             </div>
         </div>
         <!-- Left Sidebar End -->
 
-
-
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
+        <!-- Main Content -->
         <div class="main-content">
-
             <div class="page-content">
                 <div class="container-fluid">
 
-                    <!-- start page title -->
-                    <div class="row">
+                    <!-- HEADER HERO -->
+                    <div class="row mb-4">
                         <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Starter page</h4>
+                            <div class="dashboard-hero rounded-4 p-4 shadow-sm">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
+                                                <i class="ri-radio-button-line me-1"></i> Live Monitoring
+                                            </span>
+                                            <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                                                Update terakhir: 10:24 WIB
+                                            </span>
+                                        </div>
 
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Utility</a></li>
-                                        <li class="breadcrumb-item active">Starter page</li>
-                                    </ol>
+                                        <h3 class="fw-bold mb-1 text-white">
+                                            Dashboard Monitoring Transportasi Publik
+                                        </h3>
+                                        <p class="mb-0 text-white-50">
+                                            Pantau armada, rute, penumpang, keterlambatan, dan insiden secara realtime.
+                                        </p>
+                                    </div>
+
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <select class="form-select form-select-sm rounded-pill border-0 px-3">
+                                            <option>Semua Rute</option>
+                                            <option>Koridor 1</option>
+                                            <option>Koridor 2</option>
+                                            <option>Koridor 3</option>
+                                        </select>
+
+                                        <select class="form-select form-select-sm rounded-pill border-0 px-3">
+                                            <option>Hari Ini</option>
+                                            <option>7 Hari Terakhir</option>
+                                            <option>Bulan Ini</option>
+                                        </select>
+
+                                        <button class="btn btn-light btn-sm rounded-pill px-3">
+                                            <i class="ri-refresh-line me-1"></i> Refresh
+                                        </button>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
 
-                </div> <!-- container-fluid -->
-            </div>
-            <!-- End Page-content -->
+                    <!-- KPI UTAMA -->
+                    <div class="row g-3 mb-4">
 
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <script>
-                            document.write(new Date().getFullYear())
-                            </script> © Upcube.
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
-                                Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 kpi-card hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="icon-box bg-primary-subtle text-primary">
+                                            <i class="ri-bus-2-line fs-3"></i>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success rounded-pill">
+                                            +8 aktif
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-1">Armada Beroperasi</p>
+                                    <h3 class="fw-bold mb-1">128</h3>
+                                    <small class="text-muted">Dari total 145 armada tersedia</small>
+
+                                    <div class="progress mt-3 rounded-pill" style="height: 7px;">
+                                        <div class="progress-bar bg-primary" style="width: 88%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 kpi-card hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="icon-box bg-success-subtle text-success">
+                                            <i class="ri-timer-flash-line fs-3"></i>
+                                        </div>
+                                        <span class="badge bg-success-subtle text-success rounded-pill">
+                                            Baik
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-1">Ketepatan Waktu</p>
+                                    <h3 class="fw-bold mb-1">91%</h3>
+                                    <small class="text-muted">On Time Performance hari ini</small>
+
+                                    <div class="progress mt-3 rounded-pill" style="height: 7px;">
+                                        <div class="progress-bar bg-success" style="width: 91%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 kpi-card hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="icon-box bg-info-subtle text-info">
+                                            <i class="ri-team-line fs-3"></i>
+                                        </div>
+                                        <span class="badge bg-info-subtle text-info rounded-pill">
+                                            +12%
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-1">Penumpang Hari Ini</p>
+                                    <h3 class="fw-bold mb-1">18.540</h3>
+                                    <small class="text-muted">Naik dibanding kemarin</small>
+
+                                    <div class="progress mt-3 rounded-pill" style="height: 7px;">
+                                        <div class="progress-bar bg-info" style="width: 76%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 kpi-card hover-lift danger-card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="icon-box bg-danger-subtle text-danger">
+                                            <i class="ri-alert-line fs-3"></i>
+                                        </div>
+                                        <span class="badge bg-danger-subtle text-danger rounded-pill">
+                                            Perlu respon
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-1">Insiden Aktif</p>
+                                    <h3 class="fw-bold mb-1">7</h3>
+                                    <small class="text-muted">1 insiden prioritas tinggi</small>
+
+                                    <div class="progress mt-3 rounded-pill" style="height: 7px;">
+                                        <div class="progress-bar bg-danger" style="width: 35%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <!-- MAIN CONTENT -->
+                    <div class="row g-3 mb-4">
+
+                        <!-- MAP COMMAND CENTER -->
+                        <div class="col-xl-8">
+                            <div class="card border-0 shadow-sm rounded-4 h-100">
+                                <div class="card-body">
+
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                                        <div>
+                                            <h5 class="fw-bold mb-0">Peta Realtime Armada</h5>
+                                            <small class="text-muted">
+                                                Posisi kendaraan, status perjalanan, dan kepadatan rute
+                                            </small>
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+                                            <span class="badge bg-success rounded-pill px-3 py-2">Normal</span>
+                                            <span class="badge bg-warning rounded-pill px-3 py-2">Delay</span>
+                                            <span class="badge bg-danger rounded-pill px-3 py-2">Insiden</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="map-box rounded-4 position-relative overflow-hidden"
+                                        style="height: 440px; background: linear-gradient(135deg,#eef5ff,#f8fafc);">
+
+                                        <div
+                                            class="position-absolute top-0 start-0 m-3 bg-white rounded-4 shadow-sm p-3">
+                                            <h6 class="fw-bold mb-2">Ringkasan Peta</h6>
+                                            <div class="small text-muted">Armada bergerak: <b class="text-dark">112</b>
+                                            </div>
+                                            <div class="small text-muted">Armada berhenti: <b class="text-dark">16</b>
+                                            </div>
+                                            <div class="small text-muted">Rute padat: <b class="text-danger">5</b></div>
+                                        </div>
+
+                                        <div class="h-100 d-flex align-items-center justify-content-center text-center">
+                                            <div>
+                                                <i class="ri-map-pin-line display-3 text-primary"></i>
+                                                <h5 class="mt-2 fw-bold">Area Peta Realtime Armada</h5>
+                                                <p class="text-muted mb-3">
+                                                    Integrasikan Google Maps, Leaflet, atau Mapbox di area ini.
+                                                </p>
+                                                <a href="{{ url('/dashboard/peta-realtime-armada') }}"
+                                                    class="btn btn-primary rounded-pill px-4">
+                                                    Lihat Detail Peta
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RIGHT PANEL -->
+                        <div class="col-xl-4">
+
+                            <!-- ALERT PRIORITAS -->
+                            <div class="card border-0 shadow-sm rounded-4 mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="fw-bold mb-0">Alert Prioritas</h5>
+                                        <span class="badge bg-danger rounded-pill">3 Baru</span>
+                                    </div>
+
+                                    <div class="alert-item danger">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Insiden Koridor 2</h6>
+                                            <small>Armada B-021 berhenti lebih dari 15 menit.</small>
+                                        </div>
+                                        <i class="ri-arrow-right-s-line fs-4"></i>
+                                    </div>
+
+                                    <div class="alert-item warning">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Keterlambatan Tinggi</h6>
+                                            <small>3 armada terlambat pada jam sibuk.</small>
+                                        </div>
+                                        <i class="ri-arrow-right-s-line fs-4"></i>
+                                    </div>
+
+                                    <div class="alert-item info mb-0">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Rute Padat</h6>
+                                            <small>5 rute mengalami peningkatan penumpang.</small>
+                                        </div>
+                                        <i class="ri-arrow-right-s-line fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STATUS OPERASIONAL -->
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-body">
+                                    <h5 class="fw-bold mb-3">Status Operasional</h5>
+
+                                    <div class="status-row">
+                                        <div>
+                                            <span class="status-dot bg-success"></span>
+                                            Armada Normal
+                                        </div>
+                                        <strong>112</strong>
+                                    </div>
+
+                                    <div class="status-row">
+                                        <div>
+                                            <span class="status-dot bg-warning"></span>
+                                            Dalam Perawatan
+                                        </div>
+                                        <strong>9</strong>
+                                    </div>
+
+                                    <div class="status-row">
+                                        <div>
+                                            <span class="status-dot bg-danger"></span>
+                                            Insiden
+                                        </div>
+                                        <strong>7</strong>
+                                    </div>
+
+                                    <div class="status-row mb-0">
+                                        <div>
+                                            <span class="status-dot bg-secondary"></span>
+                                            Offline
+                                        </div>
+                                        <strong>17</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ANALYTIC SECTION -->
+                    <div class="row g-3">
+
+                        <div class="col-xl-6">
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-body">
+                                    <h5 class="fw-bold mb-1">Tren Penumpang</h5>
+                                    <small class="text-muted">Grafik jumlah penumpang per jam</small>
+
+                                    <div class="chart-placeholder mt-3 rounded-4">
+                                        <i class="ri-line-chart-line display-5 text-primary"></i>
+                                        <p class="mb-0 mt-2 text-muted">Area Chart Penumpang</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-body">
+                                    <h5 class="fw-bold mb-1">Rute Paling Padat</h5>
+                                    <small class="text-muted">Prioritas penambahan armada</small>
+
+                                    <div class="mt-3">
+                                        <div class="route-item">
+                                            <div>
+                                                <strong>Koridor 1</strong>
+                                                <small class="d-block text-muted">Terminal A - Pusat Kota</small>
+                                            </div>
+                                            <span class="badge bg-danger rounded-pill">96%</span>
+                                        </div>
+
+                                        <div class="route-item">
+                                            <div>
+                                                <strong>Koridor 3</strong>
+                                                <small class="d-block text-muted">Stasiun - Kampus</small>
+                                            </div>
+                                            <span class="badge bg-warning rounded-pill">82%</span>
+                                        </div>
+
+                                        <div class="route-item mb-0">
+                                            <div>
+                                                <strong>Koridor 5</strong>
+                                                <small class="d-block text-muted">Bandara - Pusat Kota</small>
+                                            </div>
+                                            <span class="badge bg-info rounded-pill">74%</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
-            </footer>
-
+            </div>
         </div>
-        <!-- end main content-->
-
+        <!-- End Main Content -->
     </div>
-    <!-- END layout-wrapper -->
-
-    <!-- Right Sidebar -->
-    <div class="right-bar">
-        <div data-simplebar class="h-100">
-            <div class="rightbar-title d-flex align-items-center px-3 py-4">
-
-                <h5 class="m-0 me-2">Settings</h5>
-
-                <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
-                    <i class="mdi mdi-close noti-icon"></i>
-                </a>
-            </div>
-
-            <!-- Settings -->
-            <hr class="mt-0" />
-            <h6 class="text-center mb-0">Choose Layouts</h6>
-
-            <div class="p-4">
-                <div class="mb-2">
-                    <img src="assets/images/layouts/layout-1.jpg" class="img-fluid img-thumbnail" alt="layout-1">
-                </div>
-
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input theme-choice" type="checkbox" id="light-mode-switch" checked>
-                    <label class="form-check-label" for="light-mode-switch">Light Mode</label>
-                </div>
-
-                <div class="mb-2">
-                    <img src="assets/images/layouts/layout-2.jpg" class="img-fluid img-thumbnail" alt="layout-2">
-                </div>
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input theme-choice" type="checkbox" id="dark-mode-switch"
-                        data-bsStyle="assets/css/bootstrap-dark.min.css" data-appStyle="assets/css/app-dark.min.css">
-                    <label class="form-check-label" for="dark-mode-switch">Dark Mode</label>
-                </div>
-
-                <div class="mb-2">
-                    <img src="assets/images/layouts/layout-3.jpg" class="img-fluid img-thumbnail" alt="layout-3">
-                </div>
-                <div class="form-check form-switch mb-5">
-                    <input class="form-check-input theme-choice" type="checkbox" id="rtl-mode-switch"
-                        data-appStyle="assets/css/app-rtl.min.css">
-                    <label class="form-check-label" for="rtl-mode-switch">RTL Mode</label>
-                </div>
-
-
-            </div>
-
-        </div> <!-- end slimscroll-menu-->
-    </div>
-    <!-- /Right-bar -->
-
-    <!-- Right bar overlay-->
-    <div class="rightbar-overlay"></div>
 
     <!-- JAVASCRIPT -->
-    <script src="assets/libs/jquery/jquery.min.js"></script>
-    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/libs/metismenu/metisMenu.min.js"></script>
-    <script src="assets/libs/simplebar/simplebar.min.js"></script>
-    <script src="assets/libs/node-waves/waves.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="assets/js/app.js"></script>
+    <script src="{{ asset('backend/assets/libs/metismenu/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/app.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
 
+        // MENU SAFE
+        if (window.jQuery && $.fn.metisMenu) {
+            $('#side-menu').metisMenu();
+        }
+
+        // SIMPLEBAR SAFE
+        if (window.SimpleBar) {
+            document.querySelectorAll('[data-simplebar]').forEach(el => {
+                new SimpleBar(el);
+            });
+        }
+
+        // WAVES SAFE
+        if (window.Waves) {
+            Waves.init();
+        }
+
+        // FULLSCREEN SAFE
+        document.querySelectorAll('[data-toggle="fullscreen"]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        });
+
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const body = document.body;
+        const toggleButton = document.getElementById('bw-theme-toggle');
+        const toggleIcon = document.getElementById('bw-theme-icon');
+        const blackWhiteSwitch = document.getElementById('black-white-mode-switch');
+
+        function setBlackWhiteMode(isDark) {
+            body.classList.remove('bw-dark');
+
+            if (isDark) {
+                body.classList.add('bw-dark');
+                localStorage.setItem('blackWhiteMode', 'dark');
+            } else {
+                localStorage.setItem('blackWhiteMode', 'normal');
+            }
+
+            if (blackWhiteSwitch) {
+                blackWhiteSwitch.checked = isDark;
+            }
+
+            if (toggleIcon) {
+                toggleIcon.className = isDark ? 'ri-sun-line' : 'ri-moon-line';
+            }
+
+            if (toggleButton) {
+                toggleButton.classList.toggle('bw-toggle-active', isDark);
+            }
+        }
+
+        const savedMode = localStorage.getItem('blackWhiteMode');
+        setBlackWhiteMode(savedMode === 'dark');
+
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                setBlackWhiteMode(!body.classList.contains('bw-dark'));
+            });
+        }
+
+        if (blackWhiteSwitch) {
+            blackWhiteSwitch.addEventListener('change', function() {
+                setBlackWhiteMode(this.checked);
+            });
+        }
+    });
+    </script>
 </body>
 
 </html>
