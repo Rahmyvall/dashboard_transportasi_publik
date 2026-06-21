@@ -14,8 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
 
     ->withMiddleware(function (Middleware $middleware) {
-
-        // ✅ TAMBAHKAN INI UNTUK MULTI LANGUAGE
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);

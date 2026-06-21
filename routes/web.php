@@ -1,17 +1,14 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/lang/{locale}', function ($locale) {
-    if (!in_array($locale, ['id', 'en'])) {
-        abort(400);
-    }
+// Halaman awal langsung ke login
+Route::get('/', [AuthController::class, 'login'])->name('login');
 
-    session(['app_locale' => $locale]);
-    return redirect()->back();
-});
-Route::get('dashboard',[DashboardController::class,'index']);
+// Proses login
+Route::post('/login', [AuthController::class, 'process'])->name('login.process');
+
+// Dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
