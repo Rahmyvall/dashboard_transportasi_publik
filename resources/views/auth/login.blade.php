@@ -29,7 +29,7 @@
                     <div class="mb-3">
                         <a href="{{ url('/') }}" class="d-inline-flex align-items-center text-decoration-none">
                             <div class="avatar-md shadow-sm">
-                                <span class="avatar-title rounded-4 bg-primary bg-gradient">
+                                <span class="avatar-title rounded-4 bg-white bg-gradient">
                                     <img src="{{ asset('backend/assets/images/logo.png') }}" height="34" alt="Logo">
                                 </span>
                             </div>

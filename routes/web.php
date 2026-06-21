@@ -8,7 +8,7 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [AuthController::class, 'login'])->name('login');
 
 // Proses login
-Route::post('/login', [AuthController::class, 'process'])->name('login.process');
+Route::post('login', [AuthController::class, 'process'])->name('login.process');
 
 // Dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
