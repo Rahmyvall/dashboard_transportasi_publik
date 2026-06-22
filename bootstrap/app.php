@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetLocale::class,
         ]);
 
+        $middleware->alias([
+            'check.login' => \App\Http\Middleware\CheckLogin::class,
+        ]);
     })
 
     ->withExceptions(function (Exceptions $exceptions) {
