@@ -25,8 +25,15 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD (manual session system)
+| DASHBOARD
 |--------------------------------------------------------------------------
 */
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('user', [UserController::class, 'index'])->name('user');
+Route::get('dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
+Route::get('dashboard/armada', [DashboardController::class, 'armada'])->name('dashboard.armada');
+/*
+|--------------------------------------------------------------------------
+| USER MANAGEMENT (CRUD)
+|--------------------------------------------------------------------------
+*/
+Route::resource('users', UserController::class);
