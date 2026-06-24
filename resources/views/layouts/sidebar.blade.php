@@ -108,11 +108,15 @@
 
              <ul class="sub-menu" aria-expanded="false">
                  <li>
-                     <a href="{{ route('users.index') }}" class="text-white-50">
+                     <a href="{{ route('admin.users.index') }}" class="text-white-50">
                          User
                      </a>
                  </li>
-                 <li><a href="#" class="text-white-50">Role</a></li>
+                 <li>
+                     <a href="{{ route('admin.roles.index') }}" class="text-white-50">
+                         Role
+                     </a>
+                 </li>
                  <li><a href="#" class="text-white-50">Hak Akses</a></li>
              </ul>
          </li>

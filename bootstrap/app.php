@@ -12,17 +12,22 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
-
     ->withMiddleware(function (Middleware $middleware) {
+
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
+        ]);
+
+        $middleware->api(append: [
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
         $middleware->alias([
             'check.login' => \App\Http\Middleware\CheckLogin::class,
         ]);
-    })
 
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();
