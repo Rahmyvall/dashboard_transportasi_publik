@@ -112,30 +112,6 @@
                                         </a>
                                     </div>
                                 </div>
-
-                                <div class="row g-0">
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="{{ asset('backend/assets/images/brands/dropbox.png') }}"
-                                                alt="Dropbox">
-                                            <span>Dropbox</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="{{ asset('backend/assets/images/brands/mail_chimp.png') }}"
-                                                alt="Mail Chimp">
-                                            <span>Mail Chimp</span>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a class="dropdown-icon-item" href="#">
-                                            <img src="{{ asset('backend/assets/images/brands/slack.png') }}"
-                                                alt="Slack">
-                                            <span>Slack</span>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
