@@ -9,7 +9,7 @@
                 <small class="text-muted">Buat akun pengguna baru</small>
             </div>
 
-            <a href="{{ route('users.index') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
                 <i class="fa fa-arrow-left me-1"></i> Kembali
             </a>
         </div>
@@ -17,7 +17,7 @@
         <div class="card shadow-sm border-0">
             <div class="card-body">
 
-                <form action="{{ route('users.store') }}" method="POST">
+                <form action="{{ route('admin.users.store') }}" method="POST">
                     @csrf
 
                     <div class="row">

@@ -4,23 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Operator extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel
-     */
     protected $table = 'operators';
 
     /**
-     * Karena tidak ada updated_at di migration
+     * Timestamp handling
+     * hanya created_at (tanpa updated_at)
      */
-    public $timestamps = false;
+    public $timestamps = true;
+
+    const UPDATED_AT = null;
 
     /**
-     * Field yang boleh diisi
+     * Mass Assignment
      */
     protected $fillable = [
         'operator_name',
@@ -31,33 +32,43 @@ class Operator extends Model
     ];
 
     /**
-     * Cast created_at ke datetime
+     * Casts (API friendly)
      */
     protected $casts = [
         'created_at' => 'datetime',
     ];
 
     /**
-     * Relasi: 1 operator punya banyak user
+     * Default value
      */
-    public function users()
-    {
-        return $this->hasMany(User::class, 'operator_id');
-    }
+    protected $attributes = [
+        'status' => 'aktif',
+    ];
 
     /**
-     * Scope: operator aktif
+     * Scope aktif
      */
-    public function scopeAktif($query)
+    public function scopeAktif(Builder $query): Builder
     {
         return $query->where('status', 'aktif');
     }
 
     /**
-     * Accessor biar lebih enak dipakai di view
+     * Scope nonaktif
      */
-    public function getNameAttribute()
+    public function scopeNonaktif(Builder $query): Builder
     {
-        return $this->operator_name;
+        return $query->where('status', 'nonaktif');
+    }
+
+    /**
+     * Accessor status label (API friendly)
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'aktif' => 'Aktif',
+            default => 'Nonaktif',
+        };
     }
 }

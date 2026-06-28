@@ -470,7 +470,6 @@
 
     <!-- App -->
     <script src="{{ asset('backend/assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/js/black-white-theme.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

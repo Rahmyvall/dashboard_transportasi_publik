@@ -39,7 +39,11 @@
              </a>
 
              <ul class="sub-menu" aria-expanded="false">
-                 <li><a href="#" class="text-white-50">Data Operator</a></li>
+                 <li>
+                     <a href="{{ route('admin.operators.index') }}" class="text-white-50">
+                         Data Operator
+                     </a>
+                 </li>
                  <li><a href="#" class="text-white-50">Data Armada</a></li>
                  <li><a href="#" class="text-white-50">Data Pengemudi</a></li>
                  <li><a href="#" class="text-white-50">Data Jenis Transportasi</a></li>
@@ -117,7 +121,6 @@
                          Role
                      </a>
                  </li>
-                 <li><a href="#" class="text-white-50">Hak Akses</a></li>
              </ul>
          </li>
 

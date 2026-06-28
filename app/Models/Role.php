@@ -4,23 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Role extends Model
 {
     use HasFactory;
 
     /**
-     * Nama tabel (opsional kalau tidak pakai plural default)
+     * Table (optional, boleh dihapus kalau nama tabel "roles")
      */
     protected $table = 'roles';
 
     /**
-     * Karena tidak ada updated_at di migration
-     */
-    public $timestamps = true;
-
-    /**
-     * Fillable field sesuai database
+     * Mass assignable fields
      */
     protected $fillable = [
         'role_name',
@@ -28,16 +24,17 @@ class Role extends Model
     ];
 
     /**
-     * Cast created_at jadi datetime
+     * Cast attributes
      */
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
      * Relasi: 1 role punya banyak user
      */
-    public function users()
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(User::class, 'role_id');
     }

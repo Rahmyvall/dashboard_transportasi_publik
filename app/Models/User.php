@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
+use App\Models\Operator;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * Mass assignable fields
@@ -24,7 +27,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Hidden fields saat response API / JSON
+     * Hidden fields
      */
     protected $hidden = [
         'password',
@@ -32,22 +35,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Cast attributes
+     * Cast attributes (Laravel 11 style)
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     /**
      * Relasi ke Role
      */
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     /**
@@ -55,7 +55,7 @@ class User extends Authenticatable
      */
     public function operator()
     {
-        return $this->belongsTo(Operator::class);
+        return $this->belongsTo(Operator::class, 'operator_id');
     }
 
     /**

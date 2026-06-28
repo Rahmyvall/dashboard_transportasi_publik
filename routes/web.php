@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
@@ -22,30 +23,49 @@ Route::get('/', function () {
 */
 Route::get('login', [AuthController::class, 'login'])->name('login.form');
 Route::post('login', [AuthController::class, 'processLogin'])->name('login.process');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD
+| PROTECTED AREA (WAJIB LOGIN)
 |--------------------------------------------------------------------------
 */
-Route::get('dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
+Route::middleware('web')->group(function () {
 
-Route::get('dashboard/armada', [DashboardController::class, 'armada'])
-    ->name('dashboard.armada');
+    // dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN AREA (RECOMMENDED STRUCTURE)
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard/armada', [DashboardController::class, 'armada'])
+        ->name('dashboard.armada');
 
-    // USER MANAGEMENT
-    Route::resource('users', UserController::class);
+    // logout harus login
+    Route::post('logout', [AuthController::class, 'logout'])
+        ->name('logout');
 
-    // ROLE MANAGEMENT
-    Route::resource('roles', RoleController::class);
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN AREA
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('admin')->name('admin.')->group(function () {
+
+        // USERS
+        Route::resource('users', UserController::class);
+
+        // ROLES
+        Route::resource('roles', RoleController::class);
+
+        // OPERATORS
+        Route::resource('operators', OperatorController::class);
+
+        // PRINT OPERATOR LIST
+        Route::get('operators/print', [OperatorController::class, 'print'])
+            ->name('operators.print');
+
+        // PRINT DETAIL OPERATOR
+        Route::get('operators/{id}/print', [OperatorController::class, 'printDetail'])
+            ->name('operators.print.detail');
+
+    });
 
 });

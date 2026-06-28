@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class AuthApiController extends Controller
 {
-    // LOGIN
     public function login(Request $request)
     {
         $request->validate([
@@ -27,7 +25,8 @@ class AuthApiController extends Controller
             ], 401);
         }
 
-        // create token
+        $user->tokens()->delete();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -38,7 +37,6 @@ class AuthApiController extends Controller
         ]);
     }
 
-    // PROFILE
     public function profile(Request $request)
     {
         return response()->json([
@@ -47,7 +45,6 @@ class AuthApiController extends Controller
         ]);
     }
 
-    // LOGOUT
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

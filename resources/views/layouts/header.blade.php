@@ -10,9 +10,12 @@
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/logo.png') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <!-- jquery.vectormap css -->
     <link href="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}"
         rel="stylesheet" type="text/css" />
@@ -22,25 +25,37 @@
         rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}"
         rel="stylesheet" type="text/css" />
-    <link href="{{ asset('backend/assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css') }}"
+    <link href="{{ asset('backend/assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css') }}"
         rel="stylesheet" type="text/css" />
-
-    <!-- Responsive datatable examples -->
     <link href="{{ asset('backend/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}"
         rel="stylesheet" type="text/css" />
 
     <!-- BOOTSTRAP (WAJIB STABLE) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
     <!-- LOCAL TEMPLATE (SAFE LOAD) -->
-    <link href="{{ asset('backend/assets/libs/boxicons/css/boxicons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/assets/css/app.min.css') }}" rel="stylesheet">
     <style>
+        :root {
+            --dark-bg: #0f172a;
+            /* background utama */
+            --dark-card: #1e293b;
+            /* card & panel */
+            --dark-border: #334155;
+            /* border */
+            --dark-text: #e2e8f0;
+            /* teks utama */
+            --dark-muted: #94a3b8;
+            /* teks placeholder */
+            --dark-input: #111827;
+            /* input field */
+        }
+
         body.dark-mode {
-            background-color: #121212 !important;
-            color: #ffffff !important;
+            background-color: var(--dark-bg) !important;
+            color: var(--dark-text) !important;
         }
 
         body.dark-mode .navbar-header,
@@ -50,12 +65,13 @@
         body.dark-mode .card,
         body.dark-mode .table,
         body.dark-mode .footer {
-            background-color: #181818 !important;
-            color: #ffffff !important;
+            background-color: var(--dark-card) !important;
+            color: var(--dark-text) !important;
         }
 
         body.dark-mode .card {
-            border-color: #6e6161 !important;
+            border: 1px solid var(--dark-border) !important;
+            border-radius: 10px;
         }
 
         body.dark-mode .table th,
@@ -69,18 +85,22 @@
         body.dark-mode h6,
         body.dark-mode p,
         body.dark-mode span {
-            color: #ffffff !important;
+            color: var(--dark-text) !important;
         }
 
         body.dark-mode .form-control,
         body.dark-mode .form-select {
-            background-color: #5e4545 !important;
-            color: #ffffff !important;
-            border-color: #444444 !important;
+            background-color: var(--dark-input) !important;
+            color: var(--dark-text) !important;
+            border: 1px solid var(--dark-border) !important;
         }
 
         body.dark-mode .form-control::placeholder {
-            color: #bbbbbb !important;
+            color: var(--dark-muted) !important;
+        }
+
+        body.dark-mode .table {
+            border-color: var(--dark-border) !important;
         }
 
         #themeToggle {
@@ -88,8 +108,7 @@
         }
 
         body.dark-mode #themeToggle {
-            color: #ffffff !important;
+            color: var(--dark-text) !important;
         }
     </style>
-
 </head>
