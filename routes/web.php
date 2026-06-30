@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\RouteController;
+use App\Http\Controllers\Admin\TransportModeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -38,6 +40,15 @@ Route::middleware('web')->group(function () {
     Route::get('dashboard/armada', [DashboardController::class, 'armada'])
         ->name('dashboard.armada');
 
+    Route::get('dashboard/perjalanan', [DashboardController::class, 'perjalanan'])
+        ->name('dashboard.perjalanan');
+
+    Route::get('dashboard/penumpang', [DashboardController::class, 'penumpang'])
+        ->name('dashboard.penumpang');
+    
+     Route::get('dashboard/peta', [DashboardController::class, 'peta'])
+        ->name('dashboard.peta');
+
     // logout harus login
     Route::post('logout', [AuthController::class, 'logout'])
         ->name('logout');
@@ -65,6 +76,10 @@ Route::middleware('web')->group(function () {
         // PRINT DETAIL OPERATOR
         Route::get('operators/{id}/print', [OperatorController::class, 'printDetail'])
             ->name('operators.print.detail');
+        
+        Route::resource('transport-modes', TransportModeController::class);
+
+        Route::resource('routes', RouteController::class);
 
     });
 

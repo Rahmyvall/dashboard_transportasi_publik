@@ -15,9 +15,9 @@
              <ul class="sub-menu">
                  <li><a href="{{ route('dashboard') }}" class="text-white-50">Ringkasan</a></li>
                  <li><a href="{{ route('dashboard.armada') }}" class="text-white-50">Armada Aktif</a></li>
-                 <li><a href="#" class="text-white-50">Perjalanan Hari Ini</a></li>
-                 <li><a href="#" class="text-white-50">Penumpang</a></li>
-                 <li><a href="#" class="text-white-50">Peta Realtime</a></li>
+                 <li><a href="{{ route('dashboard.perjalanan') }}" class="text-white-50">Perjalanan Hari Ini</a></li>
+                 <li><a href="{{ route('dashboard.penumpang') }}" class="text-white-50">Penumpang</a></li>
+                 <li><a href="{{ route('dashboard.peta') }}" class="text-white-50">Peta Realtime</a></li>
              </ul>
          </li>
 
@@ -33,9 +33,9 @@
              <ul class="sub-menu">
 
                  <li><a href="{{ route('admin.operators.index') }}" class="text-white-50">Operator</a></li>
-                 <li><a href="#" class="text-white-50">Transport Mode</a></li>
+                 <li><a href="{{ route('admin.transport-modes.index') }}" class="text-white-50">Transport Mode</a></li>
 
-                 <li><a href="#" class="text-white-50">Rute</a></li>
+                 <li><a href="{{ route('admin.routes.index') }}" class="text-white-50">Rute</a></li>
                  <li><a href="#" class="text-white-50">Halte / Stasiun</a></li>
                  <li><a href="#" class="text-white-50">Rute Stop</a></li>
 

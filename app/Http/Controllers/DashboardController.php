@@ -26,4 +26,34 @@ class DashboardController extends Controller
             'title',
         ));
     }
+
+    public function perjalanan()
+    {
+        $title = 'Dashboard Perjalanan Transportasi';
+
+
+        return view('dashboard.perjalanan', compact(
+            'title',
+        ));
+    }
+
+    public function penumpang()
+    {
+        $title = 'Dashboard Penumpang Transportasi';
+
+
+        return view('dashboard.penumpang', compact(
+            'title',
+        ));
+    }
+
+    public function peta()
+    {
+        $title = 'Dashboard Peta';
+
+
+        return view('dashboard.peta', compact(
+            'title',
+        ));
+    }
 }
