@@ -287,15 +287,14 @@
         <div class="vertical-menu" style="background: linear-gradient(180deg, #1e2022 0%, #2e2e30 100%);">
             <div data-simplebar class="h-100">
 
-                <div class="user-profile text-center pt-4 pb-4">
-                    <div>
-                        <img src="{{ asset('backend/assets/images/users/avatar-1.jpg') }}" alt="User Avatar"
-                            class="avatar-md rounded-circle border border-3 border-light shadow">
-                    </div>
+                @php
+                    $user = \App\Models\User::find(session('loginUserId'));
+                @endphp
 
+                <div class="user-profile text-center pt-4 pb-4">
                     <div class="mt-3">
                         <h4 class="font-size-16 mb-1 text-white">
-                            {{ session('loginName', session('loginUsername', 'Guest')) }}
+                            {{ $user ? $user->username : 'Guest' }}
                         </h4>
 
                         <span class="text-white-50">
@@ -336,6 +335,7 @@
             </div>
 
             @include('layouts.footer')
+            @yield('scripts')
 
         </div>
         <!-- End Main Content -->
@@ -439,13 +439,13 @@
     <script src="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}">
     </script>
     <script src="{{ asset('backend/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}">
-    </script>
-
-    <!-- Pages -->
+        <!-- Pages 
+        -->
     <script src="{{ asset('backend/assets/js/pages/dashboard.init.js') }}"></script>
 
     <!-- App -->
     <script src="{{ asset('backend/assets/js/app.js') }}"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

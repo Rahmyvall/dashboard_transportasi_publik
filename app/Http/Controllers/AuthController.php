@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
     /**
-     * Show login page
+     * SHOW LOGIN PAGE
      */
-    public function login(Request $request)
+    public function login()
     {
-        // jika sudah login → langsung dashboard
-        if (session()->get('isLogin') === true) {
+        // kalau sudah login langsung dashboard
+        if (session('isLogin')) {
             return redirect()->route('dashboard');
         }
 
@@ -23,7 +23,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Process login
+     * PROCESS LOGIN
      */
     public function processLogin(Request $request)
     {
@@ -36,7 +36,7 @@ class AuthController extends Controller
             ->where('username', $request->username)
             ->first();
 
-        // user tidak ada
+        // user tidak ditemukan
         if (!$user) {
             return back()
                 ->withInput()
@@ -47,7 +47,7 @@ class AuthController extends Controller
         if ($user->status !== 'aktif') {
             return back()
                 ->withInput()
-                ->with('error', 'Akun Anda tidak aktif.');
+                ->with('error', 'Akun tidak aktif.');
         }
 
         // cek password
@@ -70,20 +70,21 @@ class AuthController extends Controller
             'loginUsername' => $user->username,
         ]);
 
-        return redirect()->route('dashboard')
+        return redirect()
+            ->route('dashboard')
             ->with('success', 'Login berhasil.');
     }
 
     /**
-     * Logout
+     * LOGOUT
      */
     public function logout(Request $request)
-{
-    Session::flush();
+    {
+        Session::flush();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    return redirect()->route('login.form'); // ✔ INI WAJIB
-}
+        return redirect()->route('login.form');
+    }
 }

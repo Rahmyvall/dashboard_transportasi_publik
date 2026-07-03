@@ -32,4 +32,8 @@ class TransportRoute extends Model
     {
         return $this->belongsTo(TransportMode::class);
     }
+    public function routeStops()
+    {
+        return $this->hasMany(RouteStop::class)->orderBy('stop_order');
+    }
 }

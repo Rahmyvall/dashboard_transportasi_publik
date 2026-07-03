@@ -8,7 +8,9 @@ use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RouteApiController;
+use App\Http\Controllers\Api\RouteStopApiController;
 use App\Http\Controllers\Api\TransportModeApiController;
+use App\Http\Controllers\Api\StopApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,16 +21,16 @@ use App\Http\Controllers\Api\TransportModeApiController;
 Route::prefix('v1')->group(function () {
 
     /*
-    |--------------------------
-    | PUBLIC ROUTES (NO TOKEN)
-    |--------------------------
+    |--------------------------------------------------------------------------
+    | PUBLIC
+    |--------------------------------------------------------------------------
     */
     Route::post('/login', [AuthApiController::class, 'login']);
 
     /*
-    |--------------------------
-    | PROTECTED ROUTES (SANCTUM)
-    |--------------------------
+    |--------------------------------------------------------------------------
+    | PROTECTED (SANCTUM)
+    |--------------------------------------------------------------------------
     */
     Route::middleware('auth:sanctum')->group(function () {
 
@@ -46,7 +48,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/logout', [AuthApiController::class, 'logout']);
 
         /*
-        | USERS MODULE
+        |--------------------------------------------------------------------------
+        | USERS
+        |--------------------------------------------------------------------------
         */
         Route::prefix('users')->group(function () {
             Route::get('/', [UserApiController::class, 'index']);
@@ -54,7 +58,9 @@ Route::prefix('v1')->group(function () {
         });
 
         /*
-        | ROLES MODULE
+        |--------------------------------------------------------------------------
+        | ROLES
+        |--------------------------------------------------------------------------
         */
         Route::prefix('roles')->group(function () {
             Route::get('/', [RoleApiController::class, 'index']);
@@ -62,7 +68,9 @@ Route::prefix('v1')->group(function () {
         });
 
         /*
-        | OPERATORS MODULE
+        |--------------------------------------------------------------------------
+        | OPERATORS
+        |--------------------------------------------------------------------------
         */
         Route::prefix('operators')->group(function () {
             Route::get('/', [OperatorController::class, 'index']);
@@ -73,7 +81,9 @@ Route::prefix('v1')->group(function () {
         });
 
         /*
-        | TRANSPORT MODES MODULE
+        |--------------------------------------------------------------------------
+        | TRANSPORT MODES
+        |--------------------------------------------------------------------------
         */
         Route::prefix('transport-modes')->group(function () {
             Route::get('/', [TransportModeApiController::class, 'index']);
@@ -83,13 +93,39 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [TransportModeApiController::class, 'destroy']);
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | ROUTES
+        |--------------------------------------------------------------------------
+        */
         Route::prefix('routes')->group(function () {
-        Route::get('/', [RouteApiController::class, 'index']);
-        Route::get('/{id}', [RouteApiController::class, 'show']);
-        Route::post('/', [RouteApiController::class, 'store']);
-        Route::put('/{id}', [RouteApiController::class, 'update']);
-        Route::delete('/{id}', [RouteApiController::class, 'destroy']);
-    });
+            Route::get('/', [RouteApiController::class, 'index']);
+            Route::post('/', [RouteApiController::class, 'store']);
+            Route::get('/{id}', [RouteApiController::class, 'show']);
+            Route::put('/{id}', [RouteApiController::class, 'update']);
+            Route::delete('/{id}', [RouteApiController::class, 'destroy']);
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | STOPS (HALTE / TERMINAL / STATION)
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('stops')->group(function () {
+            Route::get('/', [StopApiController::class, 'index']);
+            Route::post('/', [StopApiController::class, 'store']);
+            Route::get('/{id}', [StopApiController::class, 'show']);
+            Route::put('/{id}', [StopApiController::class, 'update']);
+            Route::delete('/{id}', [StopApiController::class, 'destroy']);
+        });
+
+        Route::prefix('route-stops')->group(function () {
+            Route::get('/', [RouteStopApiController::class, 'index']);
+            Route::post('/', [RouteStopApiController::class, 'store']);
+            Route::get('/{id}', [RouteStopApiController::class, 'show']);
+            Route::put('/{id}', [RouteStopApiController::class, 'update']);
+            Route::delete('/{id}', [RouteStopApiController::class, 'destroy']);
+        });
 
     });
 

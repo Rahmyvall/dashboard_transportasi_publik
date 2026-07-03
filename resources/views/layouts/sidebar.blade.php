@@ -32,15 +32,47 @@
 
              <ul class="sub-menu">
 
-                 <li><a href="{{ route('admin.operators.index') }}" class="text-white-50">Operator</a></li>
-                 <li><a href="{{ route('admin.transport-modes.index') }}" class="text-white-50">Transport Mode</a></li>
+                 <li>
+                     <a href="{{ route('admin.operators.index') }}" class="text-white-50">
+                         Operator
+                     </a>
+                 </li>
 
-                 <li><a href="{{ route('admin.routes.index') }}" class="text-white-50">Rute</a></li>
-                 <li><a href="#" class="text-white-50">Halte / Stasiun</a></li>
-                 <li><a href="#" class="text-white-50">Rute Stop</a></li>
+                 <li>
+                     <a href="{{ route('admin.transport-modes.index') }}" class="text-white-50">
+                         Transport Mode
+                     </a>
+                 </li>
 
-                 <li><a href="#" class="text-white-50">Armada</a></li>
-                 <li><a href="#" class="text-white-50">Driver</a></li>
+                 <li>
+                     <a href="{{ route('admin.routes.index') }}" class="text-white-50">
+                         Rute
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="{{ route('admin.stops.index') }}" class="text-white-50">
+                         Halte / Stasiun
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="{{ route('admin.route-stops.index') }}" class="text-white-50">
+                         Route Stops
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="#" class="text-white-50">
+                         Armada
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="#" class="text-white-50">
+                         Driver
+                     </a>
+                 </li>
 
              </ul>
          </li>

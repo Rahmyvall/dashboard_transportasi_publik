@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\RouteController;
+use App\Http\Controllers\Admin\RouteStopController;
+use App\Http\Controllers\Admin\StopController;
 use App\Http\Controllers\Admin\TransportModeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RouteStopController as ControllersRouteStopController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -81,6 +84,15 @@ Route::middleware('web')->group(function () {
 
         Route::resource('routes', RouteController::class);
 
-    });
+        Route::resource('stops', StopController::class);
+
+        Route::patch('stops/{id}/toggle-status', [StopController::class, 'toggleStatus'])
+            ->name('stops.toggle-status');
+        Route::get('stops/map-data', [StopController::class, 'mapData'])
+            ->name('admin.stops.mapData');  
+
+        Route::resource('route-stops', RouteStopController::class);
+
+        });
 
 });
