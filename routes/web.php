@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\RouteController;
-use App\Http\Controllers\Admin\RouteStopController;
 use App\Http\Controllers\Admin\StopController;
 use App\Http\Controllers\Admin\TransportModeController;
 use Illuminate\Support\Facades\Route;
@@ -9,8 +8,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RouteStopController as ControllersRouteStopController;
+use App\Http\Controllers\Admin\RouteStopController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +92,12 @@ Route::middleware('web')->group(function () {
             ->name('admin.stops.mapData');  
 
         Route::resource('route-stops', RouteStopController::class);
+        /*
+        |-----------------------------
+        | VEHICLE ROUTES
+        |-----------------------------
+        */
+        Route::resource('vehicles', VehicleController::class);
 
         });
 

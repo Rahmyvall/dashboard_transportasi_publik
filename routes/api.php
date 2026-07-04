@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\RoleApiController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\Api\RouteApiController;
 use App\Http\Controllers\Api\RouteStopApiController;
 use App\Http\Controllers\Api\TransportModeApiController;
 use App\Http\Controllers\Api\StopApiController;
+use App\Http\Controllers\Api\VehicleApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +125,19 @@ Route::prefix('v1')->group(function () {
             Route::get('/{id}', [RouteStopApiController::class, 'show']);
             Route::put('/{id}', [RouteStopApiController::class, 'update']);
             Route::delete('/{id}', [RouteStopApiController::class, 'destroy']);
+        });
+
+        Route::prefix('vehicles')->group(function () {
+
+            Route::get('/', [VehicleApiController::class, 'index']);
+            Route::get('/{id}', [VehicleApiController::class, 'show']);
+
+            Route::post('/', [VehicleApiController::class, 'store']);
+
+            Route::put('/{id}', [VehicleApiController::class, 'update']);
+
+            Route::delete('/{id}', [VehicleApiController::class, 'destroy']);
+
         });
 
     });

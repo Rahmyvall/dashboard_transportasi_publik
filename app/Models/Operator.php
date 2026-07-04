@@ -71,4 +71,9 @@ class Operator extends Model
             default => 'Nonaktif',
         };
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

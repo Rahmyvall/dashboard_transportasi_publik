@@ -63,7 +63,7 @@
                  </li>
 
                  <li>
-                     <a href="#" class="text-white-50">
+                     <a href="{{ route('admin.vehicles.index') }}" class="text-white-50">
                          Armada
                      </a>
                  </li>
