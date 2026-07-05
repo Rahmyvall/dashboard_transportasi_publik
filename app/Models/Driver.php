@@ -65,4 +65,9 @@ class Driver extends Model
     {
         return $query->where('status', 'on_duty');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

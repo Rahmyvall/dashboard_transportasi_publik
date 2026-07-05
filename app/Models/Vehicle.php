@@ -152,4 +152,9 @@ class Vehicle extends Model
               ->orWhere('plate_number', 'like', "%$keyword%");
         });
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RouteApiController;
 use App\Http\Controllers\Api\RouteStopApiController;
+use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\TransportModeApiController;
 use App\Http\Controllers\Api\StopApiController;
 use App\Http\Controllers\Api\VehicleApiController;
@@ -147,6 +148,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/{id}', [DriverController::class, 'show']);
             Route::put('/{id}', [DriverController::class, 'update']);
             Route::delete('/{id}', [DriverController::class, 'destroy']);
+        });
+
+        Route::prefix('schedules')->group(function () {
+            Route::get('/', [ScheduleController::class, 'index']);
+            Route::post('/', [ScheduleController::class, 'store']);
+            Route::get('/{id}', [ScheduleController::class, 'show']);
+            Route::put('/{id}', [ScheduleController::class, 'update']);
+            Route::delete('/{id}', [ScheduleController::class, 'destroy']);
         });
 
     });

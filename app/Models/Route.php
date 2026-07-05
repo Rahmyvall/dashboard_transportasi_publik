@@ -58,6 +58,11 @@ class Route extends Model
         return $this->belongsTo(TransportMode::class, 'transport_mode_id');
     }
 
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
     public function routeStops(): HasMany
     {
         return $this->hasMany(RouteStop::class, 'route_id')

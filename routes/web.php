@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Admin\RouteStopController;
+use App\Http\Controllers\Admin\ScheduleController as AdminScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 
@@ -104,6 +105,8 @@ Route::middleware('web')->group(function () {
         Route::get('drivers/status/active', [DriverController::class, 'active'])->name('drivers.active');
         Route::get('drivers/status/on-duty', [DriverController::class, 'onDuty'])->name('drivers.onDuty');
         Route::get('drivers/status/inactive', [DriverController::class, 'inactive'])->name('drivers.inactive');
+
+        Route::resource('schedules', AdminScheduleController::class);
 
         });
 

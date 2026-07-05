@@ -88,7 +88,12 @@
 
              <ul class="sub-menu">
 
-                 <li><a href="#" class="text-white-50">Jadwal</a></li>
+                 <li>
+                     <a href="{{ route('admin.schedules.index') }}" class="text-white-50">
+                         Jadwal
+                     </a>
+                 </li>
+
                  <li><a href="#" class="text-white-50">Perjalanan</a></li>
                  <li><a href="#" class="text-white-50">Perjalanan Aktif</a></li>
                  <li><a href="#" class="text-white-50">Riwayat</a></li>
