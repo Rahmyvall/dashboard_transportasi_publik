@@ -76,4 +76,16 @@ class Operator extends Model
     {
         return $this->hasMany(Vehicle::class);
     }
+
+    public function drivers()
+    {
+        return $this->hasMany(Driver::class);
+    }
+    
+    public function scopeHasActiveDrivers($query)
+    {
+        return $query->whereHas('drivers', function ($q) {
+            $q->where('status', 'active');
+        });
+    }
 }

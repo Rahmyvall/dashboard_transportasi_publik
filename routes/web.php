@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\RouteController;
 use App\Http\Controllers\Admin\StopController;
 use App\Http\Controllers\Admin\TransportModeController;
@@ -98,6 +99,11 @@ Route::middleware('web')->group(function () {
         |-----------------------------
         */
         Route::resource('vehicles', VehicleController::class);
+        Route::resource('drivers', DriverController::class);
+
+        Route::get('drivers/status/active', [DriverController::class, 'active'])->name('drivers.active');
+        Route::get('drivers/status/on-duty', [DriverController::class, 'onDuty'])->name('drivers.onDuty');
+        Route::get('drivers/status/inactive', [DriverController::class, 'inactive'])->name('drivers.inactive');
 
         });
 

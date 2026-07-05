@@ -69,7 +69,7 @@
                  </li>
 
                  <li>
-                     <a href="#" class="text-white-50">
+                     <a href="{{ route('admin.drivers.index') }}" class="text-white-50">
                          Driver
                      </a>
                  </li>

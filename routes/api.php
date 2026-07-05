@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\OperatorController;
@@ -138,6 +139,14 @@ Route::prefix('v1')->group(function () {
 
             Route::delete('/{id}', [VehicleApiController::class, 'destroy']);
 
+        });
+
+        Route::prefix('drivers')->group(function () {
+            Route::get('/', [DriverController::class, 'index']);
+            Route::post('/', [DriverController::class, 'store']);
+            Route::get('/{id}', [DriverController::class, 'show']);
+            Route::put('/{id}', [DriverController::class, 'update']);
+            Route::delete('/{id}', [DriverController::class, 'destroy']);
         });
 
     });
