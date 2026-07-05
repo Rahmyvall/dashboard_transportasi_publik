@@ -10,8 +10,24 @@ use Illuminate\Http\JsonResponse;
 class DriverController extends Controller
 {
     /**
-     * GET: /api/drivers
-     * Ambil semua data driver
+     * GENERATE AUTO SIM
+     */
+    private function generateLicenseNumber()
+    {
+        $last = Driver::orderBy('id', 'desc')->first();
+
+        $next = 1;
+
+        if ($last && $last->license_number) {
+            $num = (int) str_replace('SIM-', '', $last->license_number);
+            $next = $num + 1;
+        }
+
+        return 'SIM-' . str_pad($next, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * GET ALL DRIVERS
      */
     public function index(): JsonResponse
     {
@@ -27,28 +43,23 @@ class DriverController extends Controller
     }
 
     /**
-     * POST: /api/drivers
-     * Simpan driver baru
+     * CREATE DRIVER (AUTO SIM)
      */
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'operator_id' => 'required|exists:operators,id',
             'driver_name' => 'required|string|max:150',
-            'license_number' => 'required|string|max:100|unique:drivers,license_number',
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string',
             'status' => 'nullable|in:active,inactive,on_duty',
         ]);
 
-        $driver = Driver::create([
-            'operator_id' => $request->operator_id,
-            'driver_name' => $request->driver_name,
-            'license_number' => $request->license_number,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'status' => $request->status ?? 'active',
-        ]);
+        // AUTO GENERATE SIM
+        $validated['license_number'] = $this->generateLicenseNumber();
+        $validated['status'] = $validated['status'] ?? 'active';
+
+        $driver = Driver::create($validated);
 
         return response()->json([
             'status' => true,
@@ -58,8 +69,7 @@ class DriverController extends Controller
     }
 
     /**
-     * GET: /api/drivers/{id}
-     * Detail driver
+     * DETAIL DRIVER
      */
     public function show($id): JsonResponse
     {
@@ -80,8 +90,7 @@ class DriverController extends Controller
     }
 
     /**
-     * PUT/PATCH: /api/drivers/{id}
-     * Update driver
+     * UPDATE DRIVER (SIM TIDAK BOLEH DIUBAH)
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -94,23 +103,16 @@ class DriverController extends Controller
             ], 404);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'operator_id' => 'sometimes|exists:operators,id',
             'driver_name' => 'sometimes|string|max:150',
-            'license_number' => 'sometimes|string|max:100|unique:drivers,license_number,' . $id,
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string',
             'status' => 'nullable|in:active,inactive,on_duty',
         ]);
 
-        $driver->update($request->only([
-            'operator_id',
-            'driver_name',
-            'license_number',
-            'phone',
-            'address',
-            'status',
-        ]));
+        // SIM TIDAK DIUBAH
+        $driver->update($validated);
 
         return response()->json([
             'status' => true,
@@ -120,8 +122,7 @@ class DriverController extends Controller
     }
 
     /**
-     * DELETE: /api/drivers/{id}
-     * Hapus driver (soft delete)
+     * DELETE DRIVER
      */
     public function destroy($id): JsonResponse
     {
