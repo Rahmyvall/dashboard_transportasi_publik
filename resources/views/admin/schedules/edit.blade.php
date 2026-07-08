@@ -158,17 +158,21 @@
                             {{-- START TIME --}}
                             <div class="col-md-6">
                                 <label>Start Time</label>
+
                                 <input type="time" name="start_time" class="form-control"
-                                    value="{{ $schedule->start_time }}" required>
+                                    value="{{ old('start_time', $schedule->start_time ? \Carbon\Carbon::parse($schedule->start_time)->format('H:i') : '') }}"
+                                    required>
                             </div>
+
 
                             {{-- END TIME --}}
                             <div class="col-md-6">
                                 <label>End Time</label>
-                                <input type="time" name="end_time" class="form-control"
-                                    value="{{ $schedule->end_time }}" required>
-                            </div>
 
+                                <input type="time" name="end_time" class="form-control"
+                                    value="{{ old('end_time', $schedule->end_time ? \Carbon\Carbon::parse($schedule->end_time)->format('H:i') : '') }}"
+                                    required>
+                            </div>
                             {{-- STATUS --}}
                             <div class="col-md-12">
                                 <label>Status</label>

@@ -118,33 +118,33 @@ class ScheduleController extends Controller
     ]);
 }
 
-   public function update(Request $request, $id)
+  public function update(Request $request, Schedule $schedule)
 {
     $request->validate([
         'route_id' => 'required',
         'vehicle_id' => 'nullable',
         'driver_id' => 'nullable',
         'day_type' => 'required',
+        'headway_minutes' => 'nullable|integer',
         'start_time' => 'required',
         'end_time' => 'required',
-        'headway_minutes' => 'nullable|integer',
-        'is_active' => 'nullable',
     ]);
 
-    $schedule = Schedule::findOrFail($id);
 
     $schedule->update([
         'route_id' => $request->route_id,
         'vehicle_id' => $request->vehicle_id,
         'driver_id' => $request->driver_id,
         'day_type' => $request->day_type,
+        'headway_minutes' => $request->headway_minutes,
         'start_time' => $request->start_time,
         'end_time' => $request->end_time,
-        'headway_minutes' => $request->headway_minutes,
         'is_active' => $request->has('is_active') ? 1 : 0,
     ]);
 
-    return redirect()->route('admin.schedules.index')
+
+    return redirect()
+        ->route('admin.schedules.index')
         ->with('success', 'Schedule berhasil diupdate');
 }
 
