@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             OperatorSeeder::class,
+            TripSeeder::class,
         ]);
 
         $role = DB::table('roles')

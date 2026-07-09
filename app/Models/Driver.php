@@ -6,68 +6,163 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Driver extends Model
 {
     use HasFactory, SoftDeletes;
 
+
     protected $table = 'drivers';
 
+
+
     protected $fillable = [
+
         'operator_id',
+
         'driver_name',
+
         'license_number',
+
         'phone',
+
         'address',
+
         'status',
+
     ];
+
+
 
     protected $casts = [
+
         'operator_id' => 'integer',
+
         'driver_name' => 'string',
+
         'license_number' => 'string',
+
         'phone' => 'string',
+
         'address' => 'string',
+
         'status' => 'string',
+
         'deleted_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+
     ];
 
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION
+    |--------------------------------------------------------------------------
+    */
+
+
     /**
-     * Relasi: Driver milik satu Operator
+     * Driver memiliki satu Operator
      */
     public function operator(): BelongsTo
     {
-        return $this->belongsTo(Operator::class);
+        return $this->belongsTo(
+            Operator::class,
+            'operator_id'
+        );
     }
 
+
+
+
+
     /**
-     * Scope: driver aktif
+     * Driver memiliki banyak Schedule
      */
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(
+            Schedule::class,
+            'driver_id'
+        );
+    }
+
+
+
+
+
+    /**
+     * Driver memiliki banyak Trip
+     */
+    public function trips(): HasMany
+    {
+        return $this->hasMany(
+            Trip::class,
+            'driver_id'
+        );
+    }
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE
+    |--------------------------------------------------------------------------
+    */
+
+
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where(
+            'status',
+            'active'
+        );
     }
 
-    /**
-     * Scope: driver tidak aktif
-     */
+
+
     public function scopeInactive($query)
     {
-        return $query->where('status', 'inactive');
+        return $query->where(
+            'status',
+            'inactive'
+        );
     }
 
-    /**
-     * Scope: driver sedang bertugas
-     */
+
+
     public function scopeOnDuty($query)
     {
-        return $query->where('status', 'on_duty');
+        return $query->where(
+            'status',
+            'on_duty'
+        );
     }
 
-    public function schedules()
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR
+    |--------------------------------------------------------------------------
+    */
+
+
+    public function getDisplayNameAttribute()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->driver_name 
+            . ' (' 
+            . $this->license_number 
+            . ')';
     }
+
 }

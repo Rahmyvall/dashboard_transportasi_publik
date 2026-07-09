@@ -94,12 +94,35 @@
                      </a>
                  </li>
 
-                 <li><a href="#" class="text-white-50">Perjalanan</a></li>
-                 <li><a href="#" class="text-white-50">Perjalanan Aktif</a></li>
-                 <li><a href="#" class="text-white-50">Riwayat</a></li>
+                 <li>
+                     <a href="{{ route('admin.trips.index') }}" class="text-white-50">
+                         Perjalanan
+                     </a>
+                 </li>
 
-                 <li><a href="#" class="text-white-50">Penumpang</a></li>
-                 <li><a href="#" class="text-white-50">Tiket</a></li>
+                 <li>
+                     <a href="{{ route('admin.trips.index', ['status' => 'running']) }}" class="text-white-50">
+                         Perjalanan Aktif
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="{{ route('admin.trips.index', ['status' => 'completed']) }}" class="text-white-50">
+                         Riwayat Perjalanan
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="#" class="text-white-50">
+                         Penumpang
+                     </a>
+                 </li>
+
+                 <li>
+                     <a href="#" class="text-white-50">
+                         Tiket
+                     </a>
+                 </li>
 
              </ul>
          </li>

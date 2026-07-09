@@ -11,6 +11,7 @@ use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Admin\RouteStopController;
 use App\Http\Controllers\Admin\ScheduleController as AdminScheduleController;
+use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
 
@@ -107,6 +108,7 @@ Route::middleware('web')->group(function () {
         Route::get('drivers/status/inactive', [DriverController::class, 'inactive'])->name('drivers.inactive');
 
         Route::resource('schedules', AdminScheduleController::class);
+          Route::resource('trips',TripController::class);
 
         });
 
