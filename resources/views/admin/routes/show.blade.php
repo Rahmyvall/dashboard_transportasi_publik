@@ -1,271 +1,1085 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid px-4">
+     <div class="container-fluid px-4 route-detail-page">
 
-        <!-- HERO HEADER -->
-        <div class="hero-header mb-4">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <!-- HERO -->
+          <div class="detail-hero mb-4">
 
-                <div>
-                    <h2 class="fw-bold mb-1">Detail Rute</h2>
-                    <p class="text-muted mb-0">Informasi lengkap data transport route system</p>
-                </div>
+               <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-                <a href="{{ route('admin.routes.index') }}" class="btn btn-outline-secondary">
-                    ← Kembali
-                </a>
-
-            </div>
-
-        </div>
-
-        <!-- MAIN CARD -->
-        <div class="card border-0 shadow-lg modern-card">
-
-            <!-- HEADER -->
-            <div class="card-header bg-white border-0 py-4">
-
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
                     <div>
-                        <h4 class="fw-bold mb-1">{{ $route->route_name }}</h4>
-                        <div class="text-muted small">
-                            <i class="bi bi-hash"></i> {{ $route->route_code }}
-                        </div>
+
+                         <div class="hero-badge mb-2">
+                              <i class="bi bi-map"></i>
+                              Route Detail
+                         </div>
+
+
+                         <h2 class="hero-title">
+                              Detail Rute
+                         </h2>
+
+
+                         <p class="hero-subtitle">
+                              Informasi lengkap konfigurasi transportasi dan perjalanan rute.
+                         </p>
+
+
                     </div>
 
-                    <!-- STATUS BADGE -->
+
+
+                    <div class="d-flex gap-2">
+
+
+                         <a href="{{ route('admin.routes.edit', $route->id) }}" class="btn btn-edit">
+
+                              <i class="bi bi-pencil-square me-1"></i>
+                              Edit
+
+                         </a>
+
+
+
+                         <a href="{{ route('admin.routes.index') }}" class="btn btn-back">
+
+                              <i class="bi bi-arrow-left me-1"></i>
+                              Kembali
+
+                         </a>
+
+
+                    </div>
+
+
+               </div>
+
+
+          </div>
+
+
+
+
+
+          <!-- MAIN CARD -->
+
+          <div class="card detail-card border-0">
+
+
+
+               <!-- PROFILE HEADER -->
+
+               <div class="detail-profile">
+
+
+                    <div class="profile-left">
+
+
+                         <div class="route-avatar">
+
+                              <i class="bi bi-signpost-2"></i>
+
+                         </div>
+
+
+
+                         <div>
+
+
+                              <h4>
+                                   {{ $route->route_name }}
+                              </h4>
+
+
+                              <p>
+
+                                   <i class="bi bi-upc-scan"></i>
+
+                                   {{ $route->route_code }}
+
+                              </p>
+
+
+                         </div>
+
+
+                    </div>
+
+
+
+
                     <div>
-                        @if ($route->status == 'active')
-                            <span class="badge-soft success">
-                                <i class="bi bi-check-circle me-1"></i> Active
-                            </span>
-                        @elseif($route->status == 'inactive')
-                            <span class="badge-soft danger">
-                                <i class="bi bi-x-circle me-1"></i> Inactive
-                            </span>
-                        @else
-                            <span class="badge-soft warning">
-                                <i class="bi bi-tools me-1"></i> Maintenance
-                            </span>
-                        @endif
+
+
+                         @if ($route->status == 'active')
+                              <span class="status-pill active">
+                                   <span></span>
+                                   Active
+                              </span>
+                         @elseif($route->status == 'inactive')
+                              <span class="status-pill inactive">
+                                   <span></span>
+                                   Inactive
+                              </span>
+                         @else
+                              <span class="status-pill maintenance">
+                                   <span></span>
+                                   Maintenance
+                              </span>
+                         @endif
+
+
                     </div>
 
-                </div>
 
-            </div>
 
-            <!-- BODY -->
-            <div class="card-body p-4">
+               </div>
 
-                <!-- GRID INFO -->
-                <div class="row g-4">
 
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-upc-scan"></i></div>
-                            <div>
-                                <div class="label">Kode Rute</div>
-                                <div class="value">{{ $route->route_code }}</div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-signpost-2"></i></div>
-                            <div>
-                                <div class="label">Nama Rute</div>
-                                <div class="value">{{ $route->route_name }}</div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-building"></i></div>
-                            <div>
-                                <div class="label">Operator</div>
-                                <div class="value">{{ $route->operator->operator_name ?? '-' }}</div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-truck"></i></div>
-                            <div>
-                                <div class="label">Transport Mode</div>
-                                <div class="value">{{ $route->transportMode->mode_name ?? '-' }}</div>
-                            </div>
-                        </div>
-                    </div>
+               <div class="card-body p-4">
+
+
 
                     <!-- ROUTE FLOW -->
-                    <div class="col-md-12">
-                        <div class="route-flow">
 
-                            <div class="label mb-2">Rute Perjalanan</div>
 
-                            <div class="flow-content">
-                                <div class="point start">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                    <span>{{ $route->origin }}</span>
-                                </div>
+                    <div class="route-container mb-4">
 
-                                <div class="arrow">→</div>
 
-                                <div class="point end">
-                                    <i class="bi bi-flag-fill"></i>
-                                    <span>{{ $route->destination }}</span>
-                                </div>
-                            </div>
+                         <div class="section-title mb-3">
 
-                        </div>
+
+                              <div class="section-icon">
+
+                                   <i class="bi bi-signpost-split"></i>
+
+                              </div>
+
+
+                              <div>
+
+                                   <h6>
+                                        Jalur Perjalanan
+                                   </h6>
+
+
+                                   <small>
+                                        Informasi titik awal dan tujuan perjalanan
+                                   </small>
+
+                              </div>
+
+
+                         </div>
+
+
+
+
+                         <div class="route-line">
+
+
+                              <div class="location start">
+
+
+                                   <div class="location-icon">
+
+                                        <i class="bi bi-geo-alt-fill"></i>
+
+                                   </div>
+
+
+                                   <div>
+
+                                        <small>
+                                             Origin
+                                        </small>
+
+                                        <h5>
+                                             {{ $route->origin }}
+                                        </h5>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+
+
+                              <div class="direction">
+
+
+                                   <i class="bi bi-arrow-right"></i>
+
+
+                              </div>
+
+
+
+
+
+                              <div class="location end">
+
+
+                                   <div class="location-icon">
+
+                                        <i class="bi bi-flag-fill"></i>
+
+                                   </div>
+
+
+                                   <div>
+
+                                        <small>
+                                             Destination
+                                        </small>
+
+                                        <h5>
+                                             {{ $route->destination }}
+                                        </h5>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+                         </div>
+
+
+
                     </div>
 
-                    <!-- DISTANCE -->
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-rulers"></i></div>
-                            <div>
-                                <div class="label">Jarak</div>
-                                <div class="value">{{ $route->distance_km ?? '-' }} km</div>
-                            </div>
-                        </div>
+
+
+
+
+
+                    <!-- INFORMATION GRID -->
+
+                    <div class="row g-4">
+
+
+                         <div class="col-md-6">
+
+                              <div class="info-card">
+
+                                   <div class="info-icon">
+                                        <i class="bi bi-building"></i>
+                                   </div>
+
+
+                                   <div>
+
+                                        <small>
+                                             Operator
+                                        </small>
+
+
+                                        <h6>
+                                             {{ $route->operator->operator_name ?? '-' }}
+                                        </h6>
+
+
+                                   </div>
+
+                              </div>
+
+                         </div>
+
+
+
+
+
+                         <div class="col-md-6">
+
+
+                              <div class="info-card">
+
+
+                                   <div class="info-icon">
+
+                                        <i class="bi bi-bus-front"></i>
+
+                                   </div>
+
+
+                                   <div>
+
+                                        <small>
+                                             Transport Mode
+                                        </small>
+
+
+                                        <h6>
+                                             {{ $route->transportMode->mode_name ?? '-' }}
+                                        </h6>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+                         </div>
+
+
+
+
+
+
+
+                         <div class="col-md-6">
+
+
+                              <div class="info-card">
+
+
+                                   <div class="info-icon">
+
+                                        <i class="bi bi-rulers"></i>
+
+                                   </div>
+
+
+                                   <div>
+
+
+                                        <small>
+                                             Distance
+                                        </small>
+
+
+                                        <h6>
+                                             {{ $route->distance_km ?? '-' }} KM
+                                        </h6>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+                         </div>
+
+
+
+
+
+
+
+                         <div class="col-md-6">
+
+
+                              <div class="info-card">
+
+
+                                   <div class="info-icon">
+
+                                        <i class="bi bi-clock"></i>
+
+                                   </div>
+
+
+                                   <div>
+
+
+                                        <small>
+                                             Estimated Duration
+                                        </small>
+
+
+                                        <h6>
+                                             {{ $route->estimated_duration_minutes ?? '-' }} Menit
+                                        </h6>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+                         </div>
+
+
+
                     </div>
 
-                    <!-- DURATION -->
-                    <div class="col-md-6">
-                        <div class="info-card">
-                            <div class="icon"><i class="bi bi-clock"></i></div>
-                            <div>
-                                <div class="label">Estimasi Durasi</div>
-                                <div class="value">{{ $route->estimated_duration_minutes ?? '-' }} menit</div>
-                            </div>
-                        </div>
+
+
+
+                    <!-- SYSTEM NOTE -->
+
+
+                    <div class="system-note mt-4">
+
+
+                         <div class="system-icon">
+
+                              <i class="bi bi-cpu"></i>
+
+                         </div>
+
+
+                         <div>
+
+
+                              <h6>
+                                   System Information
+                              </h6>
+
+
+                              <p>
+                                   Data rute tersimpan dalam sistem transport management.
+                                   Durasi dihitung berdasarkan jarak dengan estimasi kecepatan 40 km/jam.
+                              </p>
+
+
+                         </div>
+
+
                     </div>
 
-                </div>
 
-            </div>
 
-        </div>
+               </div>
 
-    </div>
 
-    <!-- STYLE PREMIUM -->
-    <style>
-        .hero-header {
-            padding: 18px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #f1f5f9, #eef2ff);
-            border: 1px solid #e5e7eb;
-        }
+          </div>
 
-        .modern-card {
-            border-radius: 20px;
-            overflow: hidden;
-        }
 
-        /* INFO CARD */
-        .info-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #eef2f7;
-            border-radius: 14px;
-            transition: .2s;
-        }
 
-        .info-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
+     </div>
 
-        .icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: #eef2ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4f46e5;
-            font-size: 18px;
-        }
 
-        /* TEXT */
-        .label {
-            font-size: 12px;
-            color: #64748b;
-        }
 
-        .value {
-            font-size: 15px;
-            font-weight: 600;
-            color: #0f172a;
-        }
 
-        /* ROUTE FLOW */
-        .route-flow {
-            padding: 18px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #eef2ff, #f8fafc);
-            border: 1px solid #e5e7eb;
-        }
 
-        .flow-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+     <style>
+          .route-detail-page {
 
-        .point {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-        }
+               font-family: Inter, system-ui, sans-serif;
 
-        .point.start {
-            color: #2563eb;
-        }
+          }
 
-        .point.end {
-            color: #dc2626;
-        }
 
-        .arrow {
-            font-size: 18px;
-            color: #64748b;
-        }
 
-        /* BADGE */
-        .badge-soft {
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-        }
 
-        .badge-soft.success {
-            background: #dcfce7;
-            color: #166534;
-        }
+          /* HERO */
 
-        .badge-soft.danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
+          .detail-hero {
 
-        .badge-soft.warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-    </style>
+               padding: 28px;
+
+               border-radius: 24px;
+
+               background:
+                    linear-gradient(135deg,
+                         #2563eb,
+                         #4f46e5,
+                         #7c3aed);
+
+               color: white;
+
+               box-shadow:
+                    0 20px 45px rgba(37, 99, 235, .25);
+
+          }
+
+
+
+          .hero-badge {
+
+               display: inline-flex;
+
+               gap: 8px;
+
+               align-items: center;
+
+               padding: 7px 12px;
+
+               background: rgba(255, 255, 255, .15);
+
+               border-radius: 999px;
+
+               font-size: 12px;
+
+               font-weight: 700;
+
+          }
+
+
+          .hero-title {
+
+               margin: 0;
+
+               font-size: 26px;
+
+               font-weight: 800;
+
+          }
+
+
+          .hero-subtitle {
+
+               margin: 6px 0 0;
+
+               color: #e2e8f0;
+
+               font-size: 14px;
+
+          }
+
+
+
+
+
+          .btn-back,
+          .btn-edit {
+
+               padding: 11px 18px;
+
+               border-radius: 14px;
+
+               font-weight: 700;
+
+          }
+
+
+
+          .btn-back {
+
+               background: white;
+
+               color: #2563eb;
+
+          }
+
+
+          .btn-edit {
+
+               background: #ffffff25;
+
+               color: white;
+
+               border: 1px solid rgba(255, 255, 255, .3);
+
+          }
+
+
+
+
+
+
+          /* CARD */
+
+          .detail-card {
+
+               border-radius: 24px;
+
+               overflow: hidden;
+
+               box-shadow:
+                    0 20px 55px rgba(15, 23, 42, .08);
+
+          }
+
+
+
+
+          .detail-profile {
+
+               padding: 22px;
+
+               display: flex;
+
+               justify-content: space-between;
+
+               align-items: center;
+
+               border-bottom: 1px solid #f1f5f9;
+
+          }
+
+
+
+          .profile-left {
+
+               display: flex;
+
+               align-items: center;
+
+               gap: 15px;
+
+          }
+
+
+
+          .route-avatar {
+
+               width: 55px;
+
+               height: 55px;
+
+               display: flex;
+
+               justify-content: center;
+
+               align-items: center;
+
+               border-radius: 18px;
+
+               background: #eff6ff;
+
+               color: #2563eb;
+
+               font-size: 24px;
+
+          }
+
+
+
+          .profile-left h4 {
+
+               margin: 0;
+
+               font-weight: 800;
+
+          }
+
+
+          .profile-left p {
+
+               margin: 4px 0 0;
+
+               color: #64748b;
+
+               font-size: 13px;
+
+          }
+
+
+
+
+
+          /* STATUS */
+
+
+          .status-pill {
+
+               padding: 8px 14px;
+
+               display: inline-flex;
+
+               align-items: center;
+
+               gap: 7px;
+
+               border-radius: 999px;
+
+               font-size: 12px;
+
+               font-weight: 800;
+
+          }
+
+
+
+          .status-pill span {
+
+               width: 7px;
+
+               height: 7px;
+
+               border-radius: 50%;
+
+          }
+
+
+          .active {
+
+               background: #dcfce7;
+
+               color: #166534;
+
+          }
+
+
+          .active span {
+
+               background: #16a34a;
+
+          }
+
+
+          .inactive {
+
+               background: #fee2e2;
+
+               color: #991b1b;
+
+          }
+
+
+          .inactive span {
+
+               background: #dc2626;
+
+          }
+
+
+
+          .maintenance {
+
+               background: #fef3c7;
+
+               color: #92400e;
+
+          }
+
+
+          .maintenance span {
+
+               background: #d9770b;
+
+          }
+
+
+
+
+
+
+          /* ROUTE */
+
+          .route-container {
+
+               padding: 20px;
+
+               background: #f8fafc;
+
+               border-radius: 20px;
+
+               border: 1px solid #e2e8f0;
+
+          }
+
+
+
+          .section-title {
+
+               display: flex;
+
+               gap: 12px;
+
+               align-items: center;
+
+          }
+
+
+
+          .section-icon {
+
+               width: 44px;
+
+               height: 44px;
+
+               display: flex;
+
+               align-items: center;
+
+               justify-content: center;
+
+               border-radius: 14px;
+
+               background: #dbeafe;
+
+               color: #2563eb;
+
+          }
+
+
+
+          .section-title h6 {
+
+               margin: 0;
+
+               font-weight: 800;
+
+          }
+
+
+          .section-title small {
+
+               color: #64748b;
+
+          }
+
+
+
+
+
+          .route-line {
+
+               display: flex;
+
+               align-items: center;
+
+               justify-content: space-between;
+
+               gap: 20px;
+
+               padding-top: 15px;
+
+          }
+
+
+
+          .location {
+
+               display: flex;
+
+               align-items: center;
+
+               gap: 12px;
+
+               background: white;
+
+               padding: 16px;
+
+               border-radius: 18px;
+
+               flex: 1;
+
+               border: 1px solid #e2e8f0;
+
+          }
+
+
+
+          .location-icon {
+
+               width: 42px;
+
+               height: 42px;
+
+               border-radius: 14px;
+
+               display: flex;
+
+               align-items: center;
+
+               justify-content: center;
+
+               background: #eff6ff;
+
+               color: #2563eb;
+
+          }
+
+
+
+          .location small {
+
+               color: #64748b;
+
+          }
+
+
+          .location h5 {
+
+               margin: 3px 0 0;
+
+               font-weight: 800;
+
+               font-size: 15px;
+
+          }
+
+
+
+          .direction {
+
+               font-size: 25px;
+
+               color: #94a3b8;
+
+          }
+
+
+
+
+
+          /* INFO */
+
+          .info-card {
+
+               display: flex;
+
+               align-items: center;
+
+               gap: 14px;
+
+               padding: 18px;
+
+               border-radius: 18px;
+
+               background: #fff;
+
+               border: 1px solid #e2e8f0;
+
+               transition: .2s;
+
+          }
+
+
+
+          .info-card:hover {
+
+               transform: translateY(-3px);
+
+               box-shadow: 0 12px 25px rgba(15, 23, 42, .08);
+
+          }
+
+
+
+          .info-icon {
+
+               width: 45px;
+
+               height: 45px;
+
+               display: flex;
+
+               align-items: center;
+
+               justify-content: center;
+
+               border-radius: 14px;
+
+               background: #eef2ff;
+
+               color: #4f46e5;
+
+               font-size: 20px;
+
+          }
+
+
+
+          .info-card small {
+
+               color: #64748b;
+
+               font-size: 12px;
+
+          }
+
+
+
+          .info-card h6 {
+
+               margin: 3px 0 0;
+
+               font-weight: 800;
+
+               color: #0f172a;
+
+          }
+
+
+
+
+
+          .system-note {
+
+               display: flex;
+
+               gap: 14px;
+
+               padding: 18px;
+
+               background: #f8fafc;
+
+               border-radius: 18px;
+
+               border: 1px solid #e2e8f0;
+
+          }
+
+
+
+          .system-icon {
+
+               width: 45px;
+
+               height: 45px;
+
+               display: flex;
+
+               justify-content: center;
+
+               align-items: center;
+
+               background: #dbeafe;
+
+               border-radius: 14px;
+
+               color: #2563eb;
+
+          }
+
+
+
+          .system-note h6 {
+
+               font-weight: 800;
+
+          }
+
+
+
+          .system-note p {
+
+               margin: 0;
+
+               font-size: 13px;
+
+               color: #64748b;
+
+          }
+
+
+
+
+
+          @media(max-width:768px) {
+
+               .route-line {
+
+                    flex-direction: column;
+
+               }
+
+               .direction {
+
+                    transform: rotate(90deg);
+
+               }
+
+          }
+     </style>
 @endsection

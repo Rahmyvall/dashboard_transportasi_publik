@@ -1,332 +1,1004 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid px-4">
+     <div class="container-fluid px-4 route-edit-page">
 
-        <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
-            <div>
-                <h2 class="fw-bold mb-1">Edit Rute</h2>
-                <small class="text-muted">
-                    Perbarui data rute transportasi. Kode rute dan durasi diproses otomatis oleh sistem.
-                </small>
-            </div>
+          <!-- HERO -->
+          <div class="edit-hero mb-4">
 
-            <a href="{{ route('admin.routes.index') }}" class="btn btn-outline-secondary rounded-3 px-4">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
-
-        </div>
-
-        <!-- CARD -->
-        <div class="card border-0 shadow-lg modern-card">
-
-            <!-- CARD HEADER -->
-            <div class="card-header bg-white border-0 p-4">
-
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+               <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
                     <div>
-                        <h5 class="fw-bold mb-1">{{ $route->route_name }}</h5>
-                        <small class="text-muted">
-                            Kode Rute: {{ $route->route_code }}
-                        </small>
+
+                         <div class="hero-badge mb-2">
+                              <i class="bi bi-pencil-square"></i>
+                              Update Route
+                         </div>
+
+                         <h2 class="hero-title">
+                              Edit Rute
+                         </h2>
+
+                         <p class="hero-subtitle">
+                              Perbarui informasi rute transportasi. Sistem akan menghitung ulang estimasi durasi secara
+                              otomatis.
+                         </p>
+
                     </div>
+
+
+                    <a href="{{ route('admin.routes.index') }}" class="btn btn-back">
+
+                         <i class="bi bi-arrow-left me-1"></i>
+                         Kembali
+
+                    </a>
+
+
+               </div>
+
+
+          </div>
+
+
+
+          <!-- MAIN CARD -->
+          <div class="card edit-card border-0">
+
+
+               <!-- HEADER CARD -->
+
+               <div class="edit-profile-header">
+
+
+                    <div class="route-profile">
+
+
+                         <div class="route-icon">
+
+                              <i class="bi bi-map"></i>
+
+                         </div>
+
+
+                         <div>
+
+                              <h5>
+                                   {{ $route->route_name }}
+                              </h5>
+
+                              <p>
+                                   <i class="bi bi-upc-scan"></i>
+                                   {{ $route->route_code }}
+                              </p>
+
+                         </div>
+
+
+                    </div>
+
+
 
                     <div>
-                        @if ($route->status == 'active')
-                            <span class="badge-soft success">
-                                <i class="bi bi-check-circle me-1"></i> Active
-                            </span>
-                        @elseif ($route->status == 'inactive')
-                            <span class="badge-soft danger">
-                                <i class="bi bi-x-circle me-1"></i> Inactive
-                            </span>
-                        @else
-                            <span class="badge-soft warning">
-                                <i class="bi bi-tools me-1"></i> Maintenance
-                            </span>
-                        @endif
-                    </div>
 
-                </div>
+                         @if ($route->status == 'active')
+                              <span class="status-pill active">
+                                   <span></span>
+                                   Active
+                              </span>
+                         @elseif($route->status == 'inactive')
+                              <span class="status-pill inactive">
+                                   <span></span>
+                                   Inactive
+                              </span>
+                         @else
+                              <span class="status-pill maintenance">
+                                   <span></span>
+                                   Maintenance
+                              </span>
+                         @endif
 
-            </div>
-
-            <!-- FORM -->
-            <div class="card-body p-4">
-
-                <form action="{{ route('admin.routes.update', $route->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="row g-4">
-
-                        <!-- ROUTE CODE READONLY -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-upc-scan me-1"></i> Kode Rute
-                            </label>
-
-                            <input type="text" value="{{ $route->route_code }}"
-                                class="form-control modern-input bg-light" readonly>
-
-                            <small class="text-muted">
-                                Kode rute tidak dapat diubah manual.
-                            </small>
-                        </div>
-
-                        <!-- ROUTE NAME -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-signpost-split me-1"></i> Nama Rute
-                            </label>
-
-                            <input type="text" name="route_name" value="{{ old('route_name', $route->route_name) }}"
-                                class="form-control modern-input @error('route_name') is-invalid @enderror" required>
-
-                            @error('route_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- OPERATOR -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-building me-1"></i> Operator
-                            </label>
-
-                            <select name="operator_id"
-                                class="form-select modern-input @error('operator_id') is-invalid @enderror" required>
-                                <option value="">Pilih Operator</option>
-
-                                @foreach ($operators as $o)
-                                    <option value="{{ $o->id }}"
-                                        {{ old('operator_id', $route->operator_id) == $o->id ? 'selected' : '' }}>
-                                        {{ $o->operator_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('operator_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- TRANSPORT MODE -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-truck me-1"></i> Transport Mode
-                            </label>
-
-                            <select name="transport_mode_id"
-                                class="form-select modern-input @error('transport_mode_id') is-invalid @enderror" required>
-                                <option value="">Pilih Transport</option>
-
-                                @foreach ($transportModes as $t)
-                                    <option value="{{ $t->id }}"
-                                        {{ old('transport_mode_id', $route->transport_mode_id) == $t->id ? 'selected' : '' }}>
-                                        {{ $t->mode_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('transport_mode_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- ORIGIN -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-geo-alt me-1"></i> Asal
-                            </label>
-
-                            <input type="text" name="origin" value="{{ old('origin', $route->origin) }}"
-                                class="form-control modern-input @error('origin') is-invalid @enderror" required>
-
-                            @error('origin')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- DESTINATION -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-flag me-1"></i> Tujuan
-                            </label>
-
-                            <input type="text" name="destination" value="{{ old('destination', $route->destination) }}"
-                                class="form-control modern-input @error('destination') is-invalid @enderror" required>
-
-                            @error('destination')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- DISTANCE -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-rulers me-1"></i> Jarak (KM)
-                            </label>
-
-                            <input type="number" step="0.01" min="0" name="distance_km" id="distance_km"
-                                value="{{ old('distance_km', $route->distance_km) }}"
-                                class="form-control modern-input @error('distance_km') is-invalid @enderror">
-
-                            @error('distance_km')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- DURATION PREVIEW -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-clock me-1"></i> Estimasi Durasi
-                            </label>
-
-                            <input type="text" id="duration_preview"
-                                value="{{ $route->estimated_duration_minutes ?? 0 }} menit"
-                                class="form-control modern-input bg-light" readonly>
-
-                            <small class="text-muted">
-                                Durasi dihitung otomatis dari jarak dengan asumsi 40 km per jam.
-                            </small>
-                        </div>
-
-                        <!-- STATUS -->
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold">
-                                <i class="bi bi-toggle-on me-1"></i> Status
-                            </label>
-
-                            <select name="status" class="form-select modern-input @error('status') is-invalid @enderror"
-                                required>
-                                <option value="active" {{ old('status', $route->status) == 'active' ? 'selected' : '' }}>
-                                    Active
-                                </option>
-
-                                <option value="inactive"
-                                    {{ old('status', $route->status) == 'inactive' ? 'selected' : '' }}>
-                                    Inactive
-                                </option>
-
-                                <option value="maintenance"
-                                    {{ old('status', $route->status) == 'maintenance' ? 'selected' : '' }}>
-                                    Maintenance
-                                </option>
-                            </select>
-
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                     </div>
 
-                    <!-- INFO -->
-                    <div class="alert alert-info border-0 shadow-sm rounded-4 mt-4">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Kode rute tetap mengikuti data awal. Estimasi durasi akan dihitung ulang otomatis saat data
-                        disimpan.
-                    </div>
 
-                    <!-- BUTTON -->
-                    <div class="d-flex justify-content-end gap-2 mt-4">
+               </div>
 
-                        <a href="{{ route('admin.routes.index') }}" class="btn btn-light px-4 rounded-3">
-                            Cancel
-                        </a>
 
-                        <button type="submit" class="btn btn-success px-4 rounded-3">
-                            <i class="bi bi-check-circle me-1"></i> Update Data
-                        </button>
 
-                    </div>
 
-                </form>
 
-            </div>
+               <div class="card-body p-4">
 
-        </div>
 
-    </div>
 
-    <!-- STYLE -->
-    <style>
-        .modern-card {
-            border-radius: 20px;
-            overflow: hidden;
-        }
+                    <form action="{{ route('admin.routes.update', $route->id) }}" method="POST">
 
-        .modern-input {
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            padding: 10px 12px;
-            transition: .2s ease;
-        }
+                         @csrf
+                         @method('PUT')
 
-        .modern-input:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 .2rem rgba(16, 185, 129, .15);
-        }
 
-        label {
-            font-size: 13px;
-            color: #334155;
-        }
 
-        .badge-soft {
-            padding: 7px 14px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-        }
+                         <div class="section-title mb-4">
 
-        .badge-soft.success {
-            background: #dcfce7;
-            color: #166534;
-        }
+                              <div class="section-icon">
+                                   <i class="bi bi-info-circle"></i>
+                              </div>
 
-        .badge-soft.danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
 
-        .badge-soft.warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
+                              <div>
 
-        .btn {
-            font-weight: 600;
-        }
-    </style>
+                                   <h6>
+                                        Informasi Rute
+                                   </h6>
 
-    <!-- AUTO DURATION PREVIEW -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const distanceInput = document.getElementById('distance_km');
-            const durationPreview = document.getElementById('duration_preview');
+                                   <small>
+                                        Kelola detail perjalanan dan konfigurasi transportasi
+                                   </small>
 
-            function calculateDuration() {
-                const distance = parseFloat(distanceInput.value) || 0;
-                const speed = 40;
+                              </div>
 
-                if (distance <= 0) {
-                    durationPreview.value = '0 menit';
-                    return;
-                }
+                         </div>
 
-                const duration = Math.round((distance / speed) * 60);
-                durationPreview.value = duration + ' menit';
-            }
 
-            distanceInput.addEventListener('input', calculateDuration);
-            calculateDuration();
-        });
-    </script>
+
+
+                         <div class="row g-4">
+
+
+
+                              <!-- CODE -->
+
+                              <div class="col-md-6">
+
+                                   <label>
+                                        <i class="bi bi-upc-scan"></i>
+                                        Kode Rute
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-lock"></i>
+
+                                        <input type="text" value="{{ $route->route_code }}"
+                                             class="form-control modern-input bg-light" readonly>
+
+                                   </div>
+
+
+                                   <small class="text-muted">
+                                        Kode dibuat otomatis sistem.
+                                   </small>
+
+
+                              </div>
+
+
+
+
+
+                              <!-- NAME -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-signpost"></i>
+                                        Nama Rute
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                        <input type="text" name="route_name"
+                                             value="{{ old('route_name', $route->route_name) }}"
+                                             class="form-control modern-input @error('route_name') is-invalid @enderror"
+                                             required>
+
+                                   </div>
+
+
+                                   @error('route_name')
+                                        <div class="invalid-feedback">
+                                             {{ $message }}
+                                        </div>
+                                   @enderror
+
+
+                              </div>
+
+
+
+
+
+                              <!-- OPERATOR -->
+
+                              <div class="col-md-6">
+
+                                   <label>
+                                        <i class="bi bi-building"></i>
+                                        Operator
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-building"></i>
+
+
+                                        <select name="operator_id" class="form-select modern-input" required>
+
+
+                                             <option value="">
+                                                  Pilih Operator
+                                             </option>
+
+
+                                             @foreach ($operators as $o)
+                                                  <option value="{{ $o->id }}"
+                                                       {{ old('operator_id', $route->operator_id) == $o->id ? 'selected' : '' }}>
+
+                                                       {{ $o->operator_name }}
+
+                                                  </option>
+                                             @endforeach
+
+
+                                        </select>
+
+
+                                   </div>
+
+                              </div>
+
+
+
+
+
+                              <!-- TRANSPORT -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-bus-front"></i>
+                                        Transport Mode
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-truck"></i>
+
+
+                                        <select name="transport_mode_id" class="form-select modern-input" required>
+
+
+                                             <option value="">
+                                                  Pilih Transport
+                                             </option>
+
+
+                                             @foreach ($transportModes as $t)
+                                                  <option value="{{ $t->id }}"
+                                                       {{ old('transport_mode_id', $route->transport_mode_id) == $t->id ? 'selected' : '' }}>
+
+                                                       {{ $t->mode_name }}
+
+                                                  </option>
+                                             @endforeach
+
+
+                                        </select>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+
+
+                              <!-- ORIGIN -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-geo-alt"></i>
+                                        Asal
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-pin-map"></i>
+
+
+                                        <input type="text" name="origin" value="{{ old('origin', $route->origin) }}"
+                                             class="form-control modern-input" required>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+
+
+                              <!-- DESTINATION -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-flag"></i>
+                                        Tujuan
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-geo"></i>
+
+
+                                        <input type="text" name="destination"
+                                             value="{{ old('destination', $route->destination) }}"
+                                             class="form-control modern-input" required>
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+
+
+                              <!-- DISTANCE -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-rulers"></i>
+                                        Jarak (KM)
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-signpost-split"></i>
+
+
+                                        <input type="number" step="0.01" min="0" id="distance_km"
+                                             name="distance_km" value="{{ old('distance_km', $route->distance_km) }}"
+                                             class="form-control modern-input">
+
+
+                                   </div>
+
+
+                              </div>
+
+
+
+
+
+                              <!-- DURATION -->
+
+                              <div class="col-md-6">
+
+
+                                   <label>
+                                        <i class="bi bi-clock"></i>
+                                        Estimasi Durasi
+                                   </label>
+
+
+                                   <div class="input-box">
+
+                                        <i class="bi bi-stopwatch"></i>
+
+
+                                        <input type="text" id="duration_preview"
+                                             value="{{ $route->estimated_duration_minutes ?? 0 }} menit"
+                                             class="form-control modern-input bg-light" readonly>
+
+
+                                   </div>
+
+
+                                   <small class="text-muted">
+                                        Perhitungan berdasarkan kecepatan 40 km/jam.
+                                   </small>
+
+
+                              </div>
+
+
+
+
+
+
+                              <!-- STATUS -->
+
+                              <div class="col-md-12">
+
+
+                                   <label>
+                                        <i class="bi bi-toggle-on"></i>
+                                        Status
+                                   </label>
+
+
+                                   <select name="status" class="form-select modern-input">
+
+
+                                        <option value="active" {{ $route->status == 'active' ? 'selected' : '' }}>
+                                             Active
+                                        </option>
+
+
+                                        <option value="inactive" {{ $route->status == 'inactive' ? 'selected' : '' }}>
+                                             Inactive
+                                        </option>
+
+
+                                        <option value="maintenance" {{ $route->status == 'maintenance' ? 'selected' : '' }}>
+                                             Maintenance
+                                        </option>
+
+
+                                   </select>
+
+
+                              </div>
+
+
+
+                         </div>
+
+
+
+
+
+                         <!-- SYSTEM INFO -->
+
+                         <div class="system-box mt-4">
+
+                              <div class="system-icon">
+                                   <i class="bi bi-cpu"></i>
+                              </div>
+
+
+                              <div>
+
+                                   <h6>
+                                        System Information
+                                   </h6>
+
+
+                                   <p>
+                                        Kode rute mengikuti data awal dan tidak dapat diubah.
+                                        Estimasi durasi akan diperbarui otomatis ketika jarak berubah.
+                                   </p>
+
+
+                              </div>
+
+
+                         </div>
+
+
+
+
+
+                         <!-- BUTTON -->
+
+                         <div class="form-action mt-4">
+
+
+                              <a href="{{ route('admin.routes.index') }}" class="btn btn-cancel">
+
+                                   Cancel
+
+                              </a>
+
+
+                              <button class="btn btn-update">
+
+                                   <i class="bi bi-check-circle me-1"></i>
+                                   Update Data
+
+                              </button>
+
+
+                         </div>
+
+
+
+                    </form>
+
+
+               </div>
+
+
+          </div>
+
+
+     </div>
+
+
+
+
+
+     <style>
+          .route-edit-page {
+               font-family: Inter, system-ui, sans-serif;
+          }
+
+
+
+          /* HERO */
+
+          .edit-hero {
+
+               padding: 28px;
+               border-radius: 24px;
+
+               background:
+                    linear-gradient(135deg,
+                         #2563eb,
+                         #4f46e5,
+                         #7c3aed);
+
+               color: white;
+
+               box-shadow:
+                    0 20px 45px rgba(37, 99, 235, .25);
+
+          }
+
+
+          .hero-badge {
+
+               display: inline-flex;
+               gap: 8px;
+               align-items: center;
+
+               padding: 7px 12px;
+
+               background: rgba(255, 255, 255, .15);
+
+               border-radius: 999px;
+
+               font-size: 12px;
+
+               font-weight: 700;
+
+          }
+
+
+          .hero-title {
+
+               font-size: 26px;
+               font-weight: 800;
+               margin: 0;
+
+          }
+
+
+          .hero-subtitle {
+
+               margin: 6px 0 0;
+
+               font-size: 14px;
+
+               color: #e2e8f0;
+
+          }
+
+
+          .btn-back {
+
+               background: white;
+               color: #2563eb;
+
+               padding: 11px 18px;
+
+               border-radius: 14px;
+
+               font-weight: 700;
+
+          }
+
+
+
+
+
+          .edit-card {
+
+               border-radius: 24px;
+
+               overflow: hidden;
+
+               box-shadow:
+                    0 20px 55px rgba(15, 23, 42, .08);
+
+          }
+
+
+
+
+          .edit-profile-header {
+
+               padding: 22px;
+
+               display: flex;
+
+               justify-content: space-between;
+
+               align-items: center;
+
+               border-bottom: 1px solid #f1f5f9;
+
+          }
+
+
+
+          .route-profile {
+
+               display: flex;
+
+               align-items: center;
+
+               gap: 15px;
+
+          }
+
+
+
+          .route-icon {
+
+               width: 52px;
+               height: 52px;
+
+               display: flex;
+               align-items: center;
+               justify-content: center;
+
+               border-radius: 18px;
+
+               background: #eff6ff;
+
+               color: #2563eb;
+
+               font-size: 22px;
+
+          }
+
+
+
+          .route-profile h5 {
+
+               margin: 0;
+
+               font-weight: 800;
+
+          }
+
+
+
+          .route-profile p {
+
+               margin: 4px 0 0;
+
+               color: #64748b;
+
+               font-size: 13px;
+
+          }
+
+
+
+
+
+          .status-pill {
+
+               padding: 8px 14px;
+
+               border-radius: 999px;
+
+               display: inline-flex;
+
+               align-items: center;
+
+               gap: 7px;
+
+               font-size: 12px;
+
+               font-weight: 800;
+
+          }
+
+
+          .status-pill span {
+
+               width: 7px;
+               height: 7px;
+               border-radius: 50%;
+
+          }
+
+
+          .active {
+               background: #dcfce7;
+               color: #166534;
+          }
+
+          .active span {
+               background: #16a34a;
+          }
+
+
+          .inactive {
+               background: #fee2e2;
+               color: #991b1b;
+          }
+
+          .inactive span {
+               background: #dc2626;
+          }
+
+
+          .maintenance {
+               background: #fef3c7;
+               color: #92400e;
+          }
+
+          .maintenance span {
+               background: #d97706;
+          }
+
+
+
+
+
+          .section-title {
+
+               display: flex;
+               gap: 14px;
+               align-items: center;
+
+          }
+
+
+
+          .section-icon {
+
+               width: 44px;
+               height: 44px;
+
+               border-radius: 14px;
+
+               display: flex;
+               justify-content: center;
+               align-items: center;
+
+               background: #eff6ff;
+
+               color: #2563eb;
+
+          }
+
+
+
+
+
+          label {
+
+               font-size: 13px;
+
+               font-weight: 700;
+
+               color: #334155;
+
+          }
+
+
+
+          .input-box {
+
+               position: relative;
+
+          }
+
+
+          .input-box i {
+
+               position: absolute;
+
+               left: 14px;
+
+               top: 50%;
+
+               transform: translateY(-50%);
+
+               color: #94a3b8;
+
+               z-index: 2;
+
+          }
+
+
+
+          .modern-input {
+
+               height: 46px;
+
+               padding-left: 40px;
+
+               border-radius: 14px;
+
+               border: 1px solid #e2e8f0;
+
+          }
+
+
+
+          .modern-input:focus {
+
+               border-color: #2563eb;
+
+               box-shadow:
+                    0 0 0 4px rgba(37, 99, 235, .12);
+
+          }
+
+
+
+
+          .system-box {
+
+               display: flex;
+
+               gap: 14px;
+
+               padding: 18px;
+
+               border-radius: 18px;
+
+               background: #f8fafc;
+
+               border: 1px solid #e2e8f0;
+
+          }
+
+
+
+          .system-icon {
+
+               width: 45px;
+               height: 45px;
+
+               display: flex;
+
+               justify-content: center;
+               align-items: center;
+
+               border-radius: 14px;
+
+               background: #dbeafe;
+
+               color: #2563eb;
+
+          }
+
+
+
+          .system-box h6 {
+
+               font-weight: 800;
+
+          }
+
+
+
+          .system-box p {
+
+               margin: 0;
+
+               font-size: 13px;
+
+               color: #64748b;
+
+          }
+
+
+
+          .form-action {
+
+               display: flex;
+
+               justify-content: flex-end;
+
+               gap: 12px;
+
+          }
+
+
+
+          .btn-cancel {
+
+               padding: 11px 24px;
+
+               border-radius: 14px;
+
+               background: #f8fafc;
+
+               font-weight: 700;
+
+          }
+
+
+
+          .btn-update {
+
+               padding: 11px 26px;
+
+               border-radius: 14px;
+
+               background: #2563eb;
+
+               color: white;
+
+               font-weight: 700;
+
+               box-shadow:
+                    0 12px 25px rgba(37, 99, 235, .25);
+
+          }
+
+
+          .btn-update:hover {
+
+               background: #1d4ed8;
+
+               color: white;
+
+          }
+     </style>
+
+
+
+     <script>
+          document.addEventListener('DOMContentLoaded', function() {
+
+               const distance = document.getElementById('distance_km');
+               const duration = document.getElementById('duration_preview');
+
+
+               function calculate() {
+
+                    let km = parseFloat(distance.value) || 0;
+
+                    duration.value = Math.round((km / 40) * 60) + ' menit';
+
+               }
+
+
+               distance.addEventListener('input', calculate);
+
+          });
+     </script>
 @endsection
