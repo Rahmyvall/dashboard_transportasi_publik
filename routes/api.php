@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Api\AuthApiController;
-use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\OperatorController;
@@ -11,8 +11,10 @@ use App\Http\Controllers\Api\RouteApiController;
 use App\Http\Controllers\Api\RouteStopApiController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\TransportModeApiController;
+use App\Http\Controllers\Api\TripApiController;
 use App\Http\Controllers\Api\StopApiController;
 use App\Http\Controllers\Api\VehicleApiController;
+use App\Http\Controllers\Api\DriverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,144 +22,111 @@ use App\Http\Controllers\Api\VehicleApiController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('v1')->group(function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | PUBLIC
-    |--------------------------------------------------------------------------
-    */
-    Route::post('/login', [AuthApiController::class, 'login']);
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROTECTED (SANCTUM)
-    |--------------------------------------------------------------------------
-    */
-    Route::middleware('auth:sanctum')->group(function () {
-
-        /*
-        | PROFILE
-        */
-        Route::get('/me', function (Request $request) {
-            return response()->json([
-                'status' => true,
-                'message' => 'User profile',
-                'data' => $request->user()
-            ]);
-        });
-
-        Route::post('/logout', [AuthApiController::class, 'logout']);
+Route::prefix('v1')
+    ->name('api.v1.')
+    ->group(function () {
 
         /*
         |--------------------------------------------------------------------------
-        | USERS
+        | PUBLIC ROUTES
         |--------------------------------------------------------------------------
         */
-        Route::prefix('users')->group(function () {
-            Route::get('/', [UserApiController::class, 'index']);
-            Route::post('/', [UserApiController::class, 'store']);
-        });
+
+        Route::post('login', [AuthApiController::class, 'login'])
+            ->name('login');
 
         /*
         |--------------------------------------------------------------------------
-        | ROLES
+        | PROTECTED ROUTES
         |--------------------------------------------------------------------------
         */
-        Route::prefix('roles')->group(function () {
-            Route::get('/', [RoleApiController::class, 'index']);
-            Route::post('/', [RoleApiController::class, 'store']);
+
+        Route::middleware('auth:sanctum')->group(function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | AUTH
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get('me', function (Request $request) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'User profile',
+                    'data' => $request->user(),
+                ]);
+            })->name('me');
+
+            Route::post('logout', [AuthApiController::class, 'logout'])
+                ->name('logout');
+
+            /*
+            |--------------------------------------------------------------------------
+            | USERS AND ROLES
+            |--------------------------------------------------------------------------
+            */
+
+            Route::apiResource('users', UserApiController::class)
+                ->only(['index', 'store']);
+
+            Route::apiResource('roles', RoleApiController::class)
+                ->only(['index', 'store']);
+
+            /*
+            |--------------------------------------------------------------------------
+            | MASTER DATA
+            |--------------------------------------------------------------------------
+            */
+
+            Route::apiResource('operators', OperatorController::class);
+            Route::apiResource('transport-modes', TransportModeApiController::class);
+            Route::apiResource('routes', RouteApiController::class);
+            Route::apiResource('stops', StopApiController::class);
+            Route::apiResource('route-stops', RouteStopApiController::class);
+            Route::apiResource('vehicles', VehicleApiController::class);
+            Route::apiResource('drivers', DriverController::class);
+            Route::apiResource('schedules', ScheduleController::class);
+
+            /*
+            |--------------------------------------------------------------------------
+            | TRIPS CUSTOM ROUTES
+            |--------------------------------------------------------------------------
+            | active, history, dan stats harus ditaruh sebelum apiResource trips.
+            |--------------------------------------------------------------------------
+            */
+
+            Route::prefix('trips')
+                ->name('trips.')
+                ->group(function () {
+
+                    Route::get('active', [TripApiController::class, 'active'])
+                        ->name('active');
+
+                    Route::get('history', [TripApiController::class, 'history'])
+                        ->name('history');
+
+                    Route::get('stats', [TripApiController::class, 'stats'])
+                        ->name('stats');
+
+                    Route::patch('{id}/start', [TripApiController::class, 'start'])
+                        ->name('start');
+
+                    Route::patch('{id}/complete', [TripApiController::class, 'complete'])
+                        ->name('complete');
+
+                    Route::patch('{id}/delayed', [TripApiController::class, 'delayed'])
+                        ->name('delayed');
+
+                    Route::patch('{id}/cancel', [TripApiController::class, 'cancel'])
+                        ->name('cancel');
+                });
+
+            /*
+            |--------------------------------------------------------------------------
+            | TRIPS RESOURCE
+            |--------------------------------------------------------------------------
+            */
+
+            Route::apiResource('trips', TripApiController::class);
         });
-
-        /*
-        |--------------------------------------------------------------------------
-        | OPERATORS
-        |--------------------------------------------------------------------------
-        */
-        Route::prefix('operators')->group(function () {
-            Route::get('/', [OperatorController::class, 'index']);
-            Route::post('/', [OperatorController::class, 'store']);
-            Route::get('/{id}', [OperatorController::class, 'show']);
-            Route::put('/{id}', [OperatorController::class, 'update']);
-            Route::delete('/{id}', [OperatorController::class, 'destroy']);
-        });
-
-        /*
-        |--------------------------------------------------------------------------
-        | TRANSPORT MODES
-        |--------------------------------------------------------------------------
-        */
-        Route::prefix('transport-modes')->group(function () {
-            Route::get('/', [TransportModeApiController::class, 'index']);
-            Route::post('/', [TransportModeApiController::class, 'store']);
-            Route::get('/{id}', [TransportModeApiController::class, 'show']);
-            Route::put('/{id}', [TransportModeApiController::class, 'update']);
-            Route::delete('/{id}', [TransportModeApiController::class, 'destroy']);
-        });
-
-        /*
-        |--------------------------------------------------------------------------
-        | ROUTES
-        |--------------------------------------------------------------------------
-        */
-        Route::prefix('routes')->group(function () {
-            Route::get('/', [RouteApiController::class, 'index']);
-            Route::post('/', [RouteApiController::class, 'store']);
-            Route::get('/{id}', [RouteApiController::class, 'show']);
-            Route::put('/{id}', [RouteApiController::class, 'update']);
-            Route::delete('/{id}', [RouteApiController::class, 'destroy']);
-        });
-
-        /*
-        |--------------------------------------------------------------------------
-        | STOPS (HALTE / TERMINAL / STATION)
-        |--------------------------------------------------------------------------
-        */
-        Route::prefix('stops')->group(function () {
-            Route::get('/', [StopApiController::class, 'index']);
-            Route::post('/', [StopApiController::class, 'store']);
-            Route::get('/{id}', [StopApiController::class, 'show']);
-            Route::put('/{id}', [StopApiController::class, 'update']);
-            Route::delete('/{id}', [StopApiController::class, 'destroy']);
-        });
-
-        Route::prefix('route-stops')->group(function () {
-            Route::get('/', [RouteStopApiController::class, 'index']);
-            Route::post('/', [RouteStopApiController::class, 'store']);
-            Route::get('/{id}', [RouteStopApiController::class, 'show']);
-            Route::put('/{id}', [RouteStopApiController::class, 'update']);
-            Route::delete('/{id}', [RouteStopApiController::class, 'destroy']);
-        });
-
-        Route::prefix('vehicles')->group(function () {
-
-            Route::get('/', [VehicleApiController::class, 'index']);
-            Route::get('/{id}', [VehicleApiController::class, 'show']);
-
-            Route::post('/', [VehicleApiController::class, 'store']);
-
-            Route::put('/{id}', [VehicleApiController::class, 'update']);
-
-            Route::delete('/{id}', [VehicleApiController::class, 'destroy']);
-
-        });
-
-        Route::prefix('drivers')->group(function () {
-            Route::get('/', [DriverController::class, 'index']);
-            Route::post('/', [DriverController::class, 'store']);
-            Route::get('/{id}', [DriverController::class, 'show']);
-            Route::put('/{id}', [DriverController::class, 'update']);
-            Route::delete('/{id}', [DriverController::class, 'destroy']);
-        });
-
-        Route::prefix('schedules')->group(function () {
-            Route::get('/', [ScheduleController::class, 'index']);
-            Route::post('/', [ScheduleController::class, 'store']);
-            Route::get('/{id}', [ScheduleController::class, 'show']);
-            Route::put('/{id}', [ScheduleController::class, 'update']);
-            Route::delete('/{id}', [ScheduleController::class, 'destroy']);
-        });
-
     });
-
-});

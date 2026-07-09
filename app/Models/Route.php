@@ -104,7 +104,10 @@ class Route extends Model
 
     }
 
-
+public function route()
+{
+    return $this->belongsTo(RouteModel::class);
+}
 
     /**
      * Jadwal route
