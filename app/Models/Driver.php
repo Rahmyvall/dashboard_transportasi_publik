@@ -145,7 +145,12 @@ class Driver extends Model
         );
     }
 
-
+    public function vehicles()
+    {
+        return $this->hasMany(
+            Vehicle::class
+        );
+    }
 
 
 
@@ -159,10 +164,9 @@ class Driver extends Model
 
     public function getDisplayNameAttribute()
     {
-        return $this->driver_name 
-            . ' (' 
-            . $this->license_number 
+        return $this->driver_name
+            . ' ('
+            . $this->license_number
             . ')';
     }
-
 }

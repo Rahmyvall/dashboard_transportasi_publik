@@ -13,180 +13,354 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehiclePositionController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
 | ROOT
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', function () {
     return redirect()->route('login.form');
 });
+
+
 
 /*
 |--------------------------------------------------------------------------
 | AUTH
 |--------------------------------------------------------------------------
 */
-Route::get('login', [AuthController::class, 'login'])->name('login.form');
-Route::post('login', [AuthController::class, 'processLogin'])->name('login.process');
+
+Route::get(
+    'login',
+    [AuthController::class, 'login']
+)
+    ->name('login.form');
+
+
+Route::post(
+    'login',
+    [AuthController::class, 'processLogin']
+)
+    ->name('login.process');
+
+
+
 
 /*
 |--------------------------------------------------------------------------
-| PROTECTED AREA (WAJIB LOGIN)
+| PROTECTED AREA
 |--------------------------------------------------------------------------
 */
+
 Route::middleware('web')->group(function () {
 
-    // dashboard
-    Route::get('dashboard', [DashboardController::class, 'index'])
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        'dashboard',
+        [DashboardController::class, 'index']
+    )
         ->name('dashboard');
 
-    Route::get('dashboard/armada', [DashboardController::class, 'armada'])
+
+    Route::get(
+        'dashboard/armada',
+        [DashboardController::class, 'armada']
+    )
         ->name('dashboard.armada');
 
-    Route::get('dashboard/perjalanan', [DashboardController::class, 'perjalanan'])
+
+    Route::get(
+        'dashboard/perjalanan',
+        [DashboardController::class, 'perjalanan']
+    )
         ->name('dashboard.perjalanan');
 
-    Route::get('dashboard/penumpang', [DashboardController::class, 'penumpang'])
+
+    Route::get(
+        'dashboard/penumpang',
+        [DashboardController::class, 'penumpang']
+    )
         ->name('dashboard.penumpang');
 
-    Route::get('dashboard/peta', [DashboardController::class, 'peta'])
+
+    Route::get(
+        'dashboard/peta',
+        [DashboardController::class, 'peta']
+    )
         ->name('dashboard.peta');
 
-    // logout harus login
-    Route::post('logout', [AuthController::class, 'logout'])
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post(
+        'logout',
+        [AuthController::class, 'logout']
+    )
         ->name('logout');
+
+
+
 
     /*
     |--------------------------------------------------------------------------
     | ADMIN AREA
     |--------------------------------------------------------------------------
     */
-    Route::prefix('admin')->name('admin.')->group(function () {
 
-        /*
-    |--------------------------------------------------------------------------
-    | USERS
-    |--------------------------------------------------------------------------
-    */
+    Route::prefix('admin')
+        ->name('admin.')
+        ->group(function () {
 
-        Route::resource('users', UserController::class);
 
-        /*
-    |--------------------------------------------------------------------------
-    | ROLES
-    |--------------------------------------------------------------------------
-    */
 
-        Route::resource('roles', RoleController::class);
+            /*
+        |--------------------------------------------------------------------------
+        | USERS
+        |--------------------------------------------------------------------------
+        */
 
-        /*
-    |--------------------------------------------------------------------------
-    | OPERATORS
-    |--------------------------------------------------------------------------
-    */
+            Route::resource(
+                'users',
+                UserController::class
+            );
 
-        Route::resource('operators', OperatorController::class);
 
-        Route::get('operators/print',
-            [OperatorController::class, 'print']
-        )
-            ->name('operators.print');
 
-        Route::get('operators/{id}/print',
-            [OperatorController::class, 'printDetail']
-        )
-            ->name('operators.print.detail');
+            /*
+        |--------------------------------------------------------------------------
+        | ROLES
+        |--------------------------------------------------------------------------
+        */
 
-        /*
-    |--------------------------------------------------------------------------
-    | MASTER DATA
-    |--------------------------------------------------------------------------
-    */
+            Route::resource(
+                'roles',
+                RoleController::class
+            );
 
-        Route::resource('transport-modes', TransportModeController::class);
 
-        Route::resource('routes', RouteController::class);
 
-        Route::resource('stops', StopController::class);
+            /*
+        |--------------------------------------------------------------------------
+        | OPERATORS
+        |--------------------------------------------------------------------------
+        */
 
-        Route::patch(
-            'stops/{id}/toggle-status',
-            [StopController::class, 'toggleStatus']
-        )
-            ->name('stops.toggle-status');
+            Route::resource(
+                'operators',
+                OperatorController::class
+            );
 
-        Route::get(
-            'stops/map-data',
-            [StopController::class, 'mapData']
-        )
-            ->name('stops.mapData');
 
-        Route::resource('route-stops', RouteStopController::class);
+            Route::get(
+                'operators/print',
+                [OperatorController::class, 'print']
+            )
+                ->name('operators.print');
 
-        /*
-    |--------------------------------------------------------------------------
-    | VEHICLE MANAGEMENT
-    |--------------------------------------------------------------------------
-    */
 
-        Route::resource('vehicles', VehicleController::class);
+            Route::get(
+                'operators/{id}/print',
+                [OperatorController::class, 'printDetail']
+            )
+                ->name('operators.print.detail');
 
-        Route::resource('drivers', DriverController::class);
 
-        Route::prefix('drivers')
-            ->name('drivers.')
-            ->group(function () {
 
-                Route::get(
-                    'status/active',
-                    [DriverController::class, 'active']
-                )
-                    ->name('active');
 
-                Route::get(
-                    'status/on-duty',
-                    [DriverController::class, 'onDuty']
-                )
-                    ->name('onDuty');
+            /*
+        |--------------------------------------------------------------------------
+        | MASTER DATA
+        |--------------------------------------------------------------------------
+        */
 
-                Route::get(
-                    'status/inactive',
-                    [DriverController::class, 'inactive']
-                )
-                    ->name('inactive');
+            Route::resource(
+                'transport-modes',
+                TransportModeController::class
+            );
 
-            });
 
-        /*
-    |--------------------------------------------------------------------------
-    | OPERATION
-    |--------------------------------------------------------------------------
-    */
+            Route::resource(
+                'routes',
+                RouteController::class
+            );
 
-        Route::resource(
-            'schedules',
-            AdminScheduleController::class
-        );
 
-     Route::get('trips/active', [TripController::class, 'active'])
-        ->name('trips.active');
+            Route::resource(
+                'stops',
+                StopController::class
+            );
 
-    Route::get('trips/history', [TripController::class, 'history'])
-        ->name('trips.history');
 
-    Route::resource('trips', TripController::class);
+            Route::patch(
+                'stops/{id}/toggle-status',
+                [StopController::class, 'toggleStatus']
+            )
+                ->name('stops.toggle-status');
 
-    Route::patch('trips/{id}/start', [TripController::class, 'start'])
-        ->name('trips.start');
 
-    Route::patch('trips/{id}/complete', [TripController::class, 'complete'])
-        ->name('trips.complete');
+            Route::get(
+                'stops/map-data',
+                [StopController::class, 'mapData']
+            )
+                ->name('stops.mapData');
 
-    Route::patch('trips/{id}/cancel', [TripController::class, 'cancel'])
-        ->name('trips.cancel');
-    });
 
+            Route::resource(
+                'route-stops',
+                RouteStopController::class
+            );
+
+
+
+
+            /*
+        |--------------------------------------------------------------------------
+        | VEHICLE MANAGEMENT
+        |--------------------------------------------------------------------------
+        */
+
+            Route::resource(
+                'vehicles',
+                VehicleController::class
+            );
+
+
+            Route::resource(
+                'drivers',
+                DriverController::class
+            );
+
+
+
+            Route::prefix('drivers')
+                ->name('drivers.')
+                ->group(function () {
+
+
+                    Route::get(
+                        'status/active',
+                        [DriverController::class, 'active']
+                    )
+                        ->name('active');
+
+
+                    Route::get(
+                        'status/on-duty',
+                        [DriverController::class, 'onDuty']
+                    )
+                        ->name('onDuty');
+
+
+                    Route::get(
+                        'status/inactive',
+                        [DriverController::class, 'inactive']
+                    )
+                        ->name('inactive');
+                });
+
+            Route::resource(
+                'vehicle-positions',
+                VehiclePositionController::class
+            );
+
+
+
+            Route::get(
+                'vehicle-tracking/{vehicle_id}',
+                [
+                    VehiclePositionController::class,
+                    'tracking'
+                ]
+            )
+                ->name('vehicle-tracking');
+
+
+
+            Route::get(
+                'vehicle-positions/latest/{vehicle_id}',
+                [
+                    VehiclePositionController::class,
+                    'latest'
+                ]
+            )
+                ->name('vehicle-positions.latest');
+
+
+
+
+
+            /*
+        |--------------------------------------------------------------------------
+        | OPERATION
+        |--------------------------------------------------------------------------
+        */
+
+            Route::resource(
+                'schedules',
+                AdminScheduleController::class
+            );
+
+
+
+            Route::get(
+                'trips/active',
+                [TripController::class, 'active']
+            )
+                ->name('trips.active');
+
+
+
+            Route::get(
+                'trips/history',
+                [TripController::class, 'history']
+            )
+                ->name('trips.history');
+
+
+
+            Route::resource(
+                'trips',
+                TripController::class
+            );
+
+
+
+            Route::patch(
+                'trips/{id}/start',
+                [TripController::class, 'start']
+            )
+                ->name('trips.start');
+
+
+
+            Route::patch(
+                'trips/{id}/complete',
+                [TripController::class, 'complete']
+            )
+                ->name('trips.complete');
+
+
+
+            Route::patch(
+                'trips/{id}/cancel',
+                [TripController::class, 'cancel']
+            )
+                ->name('trips.cancel');
+        });
 });

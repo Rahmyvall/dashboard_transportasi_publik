@@ -118,6 +118,12 @@
                                <span>Trip History</span>
                           </a>
                      </li>
+
+                     <li>
+                          <a href="{{ route('admin.vehicle-positions.index') }}" class="text-white-50">
+                               Vehicle Tracking
+                          </a>
+                     </li>
                      <li>
                           <a href="#" class="text-white-50">
                                Penumpang

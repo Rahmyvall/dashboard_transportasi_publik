@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -76,7 +77,6 @@ class Trip extends Model
             Schedule::class,
             'schedule_id'
         );
-
     }
 
     /**
@@ -89,9 +89,15 @@ class Trip extends Model
             Route::class,
             'route_id'
         );
-
     }
-
+    public function vehiclePositions()
+    {
+        return $this->hasMany(
+            VehiclePosition::class,
+            'trip_id',
+            'id'
+        );
+    }
     /**
      * Relasi Vehicle
      */
@@ -102,7 +108,6 @@ class Trip extends Model
             Vehicle::class,
             'vehicle_id'
         );
-
     }
 
     /**
@@ -115,7 +120,6 @@ class Trip extends Model
             Driver::class,
             'driver_id'
         );
-
     }
 
     /**
@@ -129,7 +133,6 @@ class Trip extends Model
             'status',
             self::STATUS_RUNNING
         );
-
     }
 
     /**
@@ -143,7 +146,6 @@ class Trip extends Model
             'status',
             self::STATUS_COMPLETED
         );
-
     }
 
     /**
@@ -157,7 +159,6 @@ class Trip extends Model
             'status',
             self::STATUS_SCHEDULED
         );
-
     }
 
     /**
@@ -171,7 +172,6 @@ class Trip extends Model
             'status',
             self::STATUS_CANCELLED
         );
-
     }
 
     /**
@@ -185,7 +185,6 @@ class Trip extends Model
             'status',
             self::STATUS_DELAYED
         );
-
     }
 
     /**
@@ -195,7 +194,6 @@ class Trip extends Model
     {
 
         return $this->status === self::STATUS_RUNNING;
-
     }
 
     /**
@@ -205,7 +203,6 @@ class Trip extends Model
     {
 
         return $this->status === self::STATUS_COMPLETED;
-
     }
 
     /**
@@ -215,7 +212,6 @@ class Trip extends Model
     {
 
         return $this->status === self::STATUS_DELAYED;
-
     }
 
     /**
@@ -230,14 +226,12 @@ class Trip extends Model
         ) {
 
             return null;
-
         }
 
         return $this->actual_start_time
             ->diffInMinutes(
                 $this->actual_end_time
             );
-
     }
 
     /**
@@ -265,9 +259,7 @@ class Trip extends Model
 
             default                =>
             '-',
-
         };
-
     }
 
     /**
@@ -283,7 +275,6 @@ class Trip extends Model
             'actual_start_time' => now(),
 
         ]);
-
     }
 
     /**
@@ -299,7 +290,6 @@ class Trip extends Model
             'actual_end_time' => now(),
 
         ]);
-
     }
 
     /**
@@ -315,7 +305,6 @@ class Trip extends Model
             'delay_minutes' => $minutes,
 
         ]);
-
     }
 
     /**
@@ -329,7 +318,5 @@ class Trip extends Model
             'status' => self::STATUS_CANCELLED,
 
         ]);
-
     }
-
 }
