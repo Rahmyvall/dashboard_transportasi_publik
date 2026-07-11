@@ -454,7 +454,8 @@
                                         </option>
 
 
-                                        <option value="maintenance" {{ $route->status == 'maintenance' ? 'selected' : '' }}>
+                                        <option value="maintenance"
+                                             {{ $route->status == 'maintenance' ? 'selected' : '' }}>
                                              Maintenance
                                         </option>
 

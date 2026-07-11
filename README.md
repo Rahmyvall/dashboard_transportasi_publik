@@ -93,7 +93,6 @@ Sistem ini membantu pengelola transportasi dalam mengelola armada, rute perjalan
   <img src="public/assets/1.png" width="100%" alt="Dashboard">
 </p>
 
-
 ## 📊 Dashboard Overview
 
 <p align="center">
@@ -106,7 +105,7 @@ Sistem ini membantu pengelola transportasi dalam mengelola armada, rute perjalan
   <img src="public/assets/route.png" width="100%" alt="Route">
 </p>
 
-## 🚌 Fleet Status
+## 🚌 Trip History
 
 <p align="center">
   <img src="public/assets/fleet.png" width="100%" alt="Fleet">
