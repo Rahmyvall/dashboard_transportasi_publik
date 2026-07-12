@@ -467,7 +467,7 @@
      <script src="{{ asset('backend/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}">
      </script>
 
-     <!-- Datatable Buttons -->
+     <!-- Datatables Buttons -->
      <script src="{{ asset('backend/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
      <script src="{{ asset('backend/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>
      <script src="{{ asset('backend/assets/libs/jszip/jszip.min.js') }}"></script>
