@@ -9,83 +9,344 @@ class Stop extends Model
 {
     use HasFactory;
 
+
     protected $table = 'stops';
 
-    /**
-     * Field yang boleh diisi (mass assignment)
-     */
+
+
+    protected $primaryKey = 'id';
+
+
+
     protected $fillable = [
+
         'stop_code',
+
         'stop_name',
+
         'stop_type',
+
         'latitude',
+
         'longitude',
+
         'address',
+
         'is_active',
+
     ];
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CAST DATA
+    |--------------------------------------------------------------------------
+    */
+
+
+    protected $casts = [
+
+        'latitude' => 'decimal:8',
+
+        'longitude' => 'decimal:8',
+
+        'is_active' => 'boolean',
+
+    ];
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONSHIP
+    |--------------------------------------------------------------------------
+    */
+
+
 
     /**
-     * Cast data otomatis
+     * Satu halte memiliki banyak data penumpang
+     *
+     * stops.id
+     *      |
+     *      |
+     * passenger_counts.stop_id
      */
-    protected $casts = [
-        'latitude' => 'float',
-        'longitude' => 'float',
-        'is_active' => 'boolean',
-    ];
+    public function passengerCounts()
+    {
 
-    /* =========================
-        SCOPES (FILTER DATA)
-    ========================= */
+        return $this->hasMany(
 
-    // hanya data aktif
+            PassengerCount::class,
+
+            'stop_id',
+
+            'id'
+
+        );
+    }
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | QUERY SCOPE
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    /**
+     * Halte aktif
+     */
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+
+        return $query->where(
+            'is_active',
+            true
+        );
     }
 
-    // filter berdasarkan tipe stop
-    public function scopeType($query, $type)
+
+
+
+
+
+
+    /**
+     * Filter tipe halte
+     */
+    public function scopeType(
+        $query,
+        $type
+    ) {
+
+        return $query->where(
+            'stop_type',
+            $type
+        );
+    }
+
+
+
+
+
+
+
+    /**
+     * Search halte
+     */
+    public function scopeSearch(
+        $query,
+        $keyword
+    ) {
+
+        return $query->where(function ($q) use ($keyword) {
+
+
+            $q->where(
+                'stop_code',
+                'like',
+                "%{$keyword}%"
+            )
+
+
+                ->orWhere(
+                    'stop_name',
+                    'like',
+                    "%{$keyword}%"
+                )
+
+
+                ->orWhere(
+                    'address',
+                    'like',
+                    "%{$keyword}%"
+                );
+        });
+    }
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    /**
+     * Nama halte untuk tampilan
+     */
+    public function getDisplayNameAttribute()
     {
-        return $query->where('stop_type', $type);
+
+        return $this->stop_name
+            ?: 'Tidak Ada Halte';
     }
 
-    // cari berdasarkan keyword nama
-    public function scopeSearch($query, $keyword)
-    {
-        return $query->where('stop_name', 'like', '%' . $keyword . '%');
-    }
 
-    /* =========================
-        ACCESSOR (FORMAT DATA)
-    ========================= */
 
-    // format nama stop (uppercase)
-    public function getStopNameAttribute($value)
-    {
-        return strtoupper($value);
-    }
 
-    // format koordinat gabungan
+
+
+
+    /**
+     * Format koordinat
+     */
     public function getCoordinateAttribute()
     {
-        if ($this->latitude && $this->longitude) {
-            return $this->latitude . ', ' . $this->longitude;
+
+        if (
+            $this->latitude !== null &&
+            $this->longitude !== null
+        ) {
+
+            return
+
+                $this->latitude .
+                ', ' .
+                $this->longitude;
         }
 
-        return null;
+
+        return '-';
     }
 
-    /* =========================
-        MUTATOR (INPUT DATA)
-    ========================= */
 
+
+
+
+
+
+    /**
+     * Label status
+     */
+    public function getStatusLabelAttribute()
+    {
+
+        return $this->is_active
+
+            ? 'Aktif'
+
+            : 'Tidak Aktif';
+    }
+
+
+
+
+
+
+
+    /**
+     * Warna badge status
+     */
+    public function getStatusColorAttribute()
+    {
+
+        return $this->is_active
+
+            ? 'success'
+
+            : 'danger';
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATOR
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    /**
+     * Format kode halte
+     */
     public function setStopCodeAttribute($value)
     {
-        $this->attributes['stop_code'] = strtoupper($value);
+
+        $this->attributes['stop_code']
+
+            =
+
+            strtoupper(
+                trim($value ?? '')
+            );
     }
 
+
+
+
+
+
+
+    /**
+     * Format nama halte
+     */
     public function setStopNameAttribute($value)
     {
-        $this->attributes['stop_name'] = ucwords(strtolower($value));
+
+        $this->attributes['stop_name']
+
+            =
+
+            ucwords(
+                strtolower(
+                    trim($value ?? '')
+                )
+            );
+    }
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPER
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    public function isActive(): bool
+    {
+
+        return $this->is_active === true;
+    }
+
+
+
+
+    public function isInactive(): bool
+    {
+
+        return $this->is_active === false;
     }
 }

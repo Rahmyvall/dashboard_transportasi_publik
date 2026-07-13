@@ -9,81 +9,376 @@ class TransportMode extends Model
 {
     use HasFactory;
 
+
+
     protected $table = 'transport_modes';
 
+
+
+    protected $primaryKey = 'id';
+
+
+
+
+
     protected $fillable = [
+
         'mode_code',
+
         'mode_name',
+
         'description',
+
     ];
 
-    /*
-    |---------------------------------------------
-    | ACCESSOR
-    |---------------------------------------------
-    | Membuat format nama mode lebih rapi
-    */
-    public function getModeNameAttribute($value)
-    {
-        return ucfirst($value);
-    }
+
+
+
+
+
+
 
     /*
-    |---------------------------------------------
-    | MUTATOR
-    |---------------------------------------------
-    | Mode code selalu uppercase
+    |--------------------------------------------------------------------------
+    | CAST DATA
+    |--------------------------------------------------------------------------
     */
-    public function setModeCodeAttribute($value)
-    {
-        $this->attributes['mode_code'] = strtoupper($value);
-    }
+
+
+    protected $casts = [
+
+        'id' => 'integer',
+
+    ];
+
+
+
+
+
+
+
+
 
     /*
-    |---------------------------------------------
-    | SCOPES
-    |---------------------------------------------
+    |--------------------------------------------------------------------------
+    | RELATIONSHIP
+    |--------------------------------------------------------------------------
     */
 
-    // Cari berdasarkan kode
-    public function scopeCode($query, $code)
+
+
+
+
+    /**
+     * Satu mode transport memiliki banyak kendaraan
+     *
+     * transport_modes.id
+     *
+     * vehicles.transport_mode_id
+     */
+    public function vehicles()
     {
-        return $query->where('mode_code', $code);
+
+        return $this->hasMany(
+
+            Vehicle::class,
+
+            'transport_mode_id',
+
+            'id'
+
+        );
     }
 
-    // Cari berdasarkan nama
-    public function scopeName($query, $name)
-    {
-        return $query->where('mode_name', 'LIKE', '%' . $name . '%');
-    }
 
-    // Hanya data aktif (jika nanti kamu tambah kolom status)
-    public function scopeActive($query)
-    {
-        return $query->where('status', 1);
-    }
 
-    /*
-    |---------------------------------------------
-    | RELATIONS (SIAP EXPANSI SISTEM TRANSPORT)
-    |---------------------------------------------
-    */
 
-    // Jika nanti mode dipakai oleh banyak rute
+
+
+
+
+    /**
+     * Jika route memiliki transport mode
+     * (optional jika tabel routes ada kolom transport_mode_id)
+     */
     public function routes()
     {
-        return $this->hasMany(TransportRoute::class);
+
+        return $this->hasMany(
+
+            Route::class,
+
+            'transport_mode_id',
+
+            'id'
+
+        );
     }
 
-    // Jika mode dipakai oleh armada
-    public function fleets()
-    {
-        return $this->hasMany(Fleet::class, 'transport_mode_id');
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | QUERY SCOPE
+    |--------------------------------------------------------------------------
+    */
+
+
+
+
+
+    /**
+     * Filter kode transport
+     */
+    public function scopeCode(
+        $query,
+        $code
+    ) {
+
+        return $query->where(
+
+            'mode_code',
+
+            $code
+
+        );
     }
 
-    // Jika mode dipakai oleh operator (opsional)
-    public function operators()
+
+
+
+
+
+
+
+    /**
+     * Search nama mode
+     */
+    public function scopeSearch(
+        $query,
+        $keyword
+    ) {
+
+
+        return $query->where(function ($q) use ($keyword) {
+
+
+            $q->where(
+
+                'mode_code',
+
+                'like',
+
+                "%{$keyword}%"
+
+            )
+
+
+                ->orWhere(
+
+                    'mode_name',
+
+                    'like',
+
+                    "%{$keyword}%"
+
+                );
+        });
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Filter nama
+     */
+    public function scopeName(
+        $query,
+        $name
+    ) {
+
+        return $query->where(
+
+            'mode_name',
+
+            'like',
+
+            "%{$name}%"
+
+        );
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR
+    |--------------------------------------------------------------------------
+    */
+
+
+
+
+
+    /**
+     * Nama mode tampilan
+     */
+    public function getDisplayNameAttribute()
     {
-        return $this->hasMany(Operator::class, 'transport_mode_id');
+
+        return ucfirst(
+
+            strtolower(
+
+                $this->mode_name
+
+            )
+
+        );
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Label lengkap
+     */
+    public function getModeLabelAttribute()
+    {
+
+        return
+
+            $this->mode_code
+
+            .
+
+            ' - '
+
+            .
+
+            $this->display_name;
+    }
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATOR
+    |--------------------------------------------------------------------------
+    */
+
+
+
+
+
+    /**
+     * Mode code selalu uppercase
+     */
+    public function setModeCodeAttribute($value)
+    {
+
+        $this->attributes['mode_code']
+
+            =
+
+            strtoupper(
+
+                trim($value ?? '')
+
+            );
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Mode name format
+     */
+    public function setModeNameAttribute($value)
+    {
+
+        $this->attributes['mode_name']
+
+            =
+
+            ucwords(
+
+                strtolower(
+
+                    trim($value ?? '')
+
+                )
+
+            );
+    }
+
+
+
+
+
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HELPER
+    |--------------------------------------------------------------------------
+    */
+
+
+
+
+
+    /**
+     * Jumlah kendaraan
+     */
+    public function getVehicleCountAttribute()
+    {
+
+        return $this->vehicles()->count();
+    }
+
+
+
+
+
+
+
+    /**
+     * Cek memiliki kendaraan
+     */
+    public function hasVehicles(): bool
+    {
+
+        return $this->vehicles()->exists();
     }
 }

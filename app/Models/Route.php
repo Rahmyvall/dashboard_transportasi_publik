@@ -71,7 +71,6 @@ class Route extends Model
             self::STATUS_MAINTENANCE,
 
         ];
-
     }
 
 
@@ -86,7 +85,6 @@ class Route extends Model
             Operator::class,
             'operator_id'
         );
-
     }
 
 
@@ -101,13 +99,7 @@ class Route extends Model
             TransportMode::class,
             'transport_mode_id'
         );
-
     }
-
-public function route()
-{
-    return $this->belongsTo(RouteModel::class);
-}
 
     /**
      * Jadwal route
@@ -119,7 +111,6 @@ public function route()
             Schedule::class,
             'route_id'
         );
-
     }
 
 
@@ -134,7 +125,6 @@ public function route()
             Trip::class,
             'route_id'
         );
-
     }
 
 
@@ -149,11 +139,10 @@ public function route()
             RouteStop::class,
             'route_id'
         )
-        ->orderBy(
-            'stop_order',
-            'asc'
-        );
-
+            ->orderBy(
+                'stop_order',
+                'asc'
+            );
     }
 
 
@@ -171,23 +160,22 @@ public function route()
             'stop_id'
         )
 
-        ->withPivot([
+            ->withPivot([
 
-            'stop_order',
+                'stop_order',
 
-            'distance_from_start_km',
+                'distance_from_start_km',
 
-            'estimated_arrival_minutes',
+                'estimated_arrival_minutes',
 
-        ])
+            ])
 
-        ->withTimestamps()
+            ->withTimestamps()
 
-        ->orderByPivot(
-            'stop_order',
-            'asc'
-        );
-
+            ->orderByPivot(
+                'stop_order',
+                'asc'
+            );
     }
 
 
@@ -202,7 +190,6 @@ public function route()
             'status',
             self::STATUS_ACTIVE
         );
-
     }
 
 
@@ -217,7 +204,6 @@ public function route()
             'status',
             self::STATUS_INACTIVE
         );
-
     }
 
 
@@ -232,7 +218,6 @@ public function route()
             'status',
             self::STATUS_MAINTENANCE
         );
-
     }
 
 
@@ -243,14 +228,12 @@ public function route()
     public function scopeByOperator(
         Builder $query,
         int $operatorId
-    ): Builder
-    {
+    ): Builder {
 
         return $query->where(
             'operator_id',
             $operatorId
         );
-
     }
 
 
@@ -261,14 +244,19 @@ public function route()
     public function scopeByTransportMode(
         Builder $query,
         int $transportModeId
-    ): Builder
-    {
+    ): Builder {
 
         return $query->where(
             'transport_mode_id',
             $transportModeId
         );
-
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(
+            Ticket::class,
+            'route_id'
+        );
+    }
 }

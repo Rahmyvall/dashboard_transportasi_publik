@@ -125,13 +125,14 @@
                           </a>
                      </li>
                      <li>
-                          <a href="#" class="text-white-50">
+                          <a href="{{ route('admin.passenger-counts.index') }}" class="text-white-50">
                                Penumpang
                           </a>
                      </li>
 
+
                      <li>
-                          <a href="#" class="text-white-50">
+                          <a href="{{ route('admin.tickets.index') }}" class="text-white-50">
                                Tiket
                           </a>
                      </li>

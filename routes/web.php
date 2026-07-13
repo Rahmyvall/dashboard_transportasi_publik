@@ -9,7 +9,9 @@ use App\Http\Controllers\Admin\TransportModeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\PassengerCountController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -362,5 +364,16 @@ Route::middleware('web')->group(function () {
                 [TripController::class, 'cancel']
             )
                 ->name('trips.cancel');
+
+            Route::resource(
+                'passenger-counts',
+                PassengerCountController::class
+            );
+
+
+            Route::resource(
+                'tickets',
+                TicketController::class
+            );
         });
 });

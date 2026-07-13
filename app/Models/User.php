@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Role;
-use App\Models\Operator;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Mass assignable fields
-     */
     protected $fillable = [
         'role_id',
         'operator_id',
@@ -26,42 +23,30 @@ class User extends Authenticatable
         'status',
     ];
 
-    /**
-     * Hidden fields
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Cast attributes (Laravel 11 style)
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    /**
-     * Relasi ke Role
-     */
-    public function role()
+    protected function casts(): array
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
-    /**
-     * Relasi ke Operator
-     */
-    public function operator()
+    public function role(): BelongsTo
     {
-        return $this->belongsTo(Operator::class, 'operator_id');
+        return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Scope user aktif
-     */
-    public function scopeAktif($query)
+    public function operator(): BelongsTo
+    {
+        return $this->belongsTo(Operator::class);
+    }
+
+    public function scopeAktif(Builder $query): Builder
     {
         return $query->where('status', 'aktif');
     }
