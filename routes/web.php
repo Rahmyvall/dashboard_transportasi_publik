@@ -375,5 +375,6 @@ Route::middleware('web')->group(function () {
                 'tickets',
                 TicketController::class
             );
+            Route::resource('tickets', TicketController::class);
         });
 });

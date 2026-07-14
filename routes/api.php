@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RouteController;
 use App\Http\Controllers\Api\RouteStopController;
 use App\Http\Controllers\Api\StopController;
+use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\TransportModeController;
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\UserController;
@@ -180,6 +181,35 @@ Route::prefix('v1')
             Route::apiResource(
                 'vehicle-positions',
                 VehiclePositionController::class
+            );
+            Route::get(
+                'tickets/latest',
+                [TicketController::class, 'latest']
+            );
+
+            Route::get(
+                'tickets/summary',
+                [TicketController::class, 'summary']
+            );
+
+            Route::get(
+                'trips/{trip}/tickets',
+                [TicketController::class, 'byTrip']
+            );
+
+            Route::get(
+                'routes/{route}/tickets',
+                [TicketController::class, 'byRoute']
+            );
+
+            Route::get(
+                'vehicles/{vehicle}/tickets',
+                [TicketController::class, 'byVehicle']
+            );
+
+            Route::apiResource(
+                'tickets',
+                TicketController::class
             );
         });
     });
