@@ -11,8 +11,10 @@ use App\Http\Controllers\Api\RouteController;
 use App\Http\Controllers\Api\RouteStopController;
 use App\Http\Controllers\Api\StopController;
 use App\Http\Controllers\Api\TransportModeController;
+use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\VehiclePositionController;
 
 Route::prefix('v1')
     ->name('api.v1.')
@@ -146,5 +148,38 @@ Route::prefix('v1')
             ])->whereNumber('id');
 
             Route::apiResource('drivers', DriverController::class);
+            Route::patch(
+                '/trips/{trip}/status',
+                [TripController::class, 'changeStatus']
+            );
+
+            Route::apiResource(
+                'trips',
+                TripController::class
+            );
+            Route::get(
+                '/vehicle-positions/latest',
+                [VehiclePositionController::class, 'latestAll']
+            );
+
+            Route::get(
+                '/vehicles/{vehicle}/positions/latest',
+                [VehiclePositionController::class, 'latest']
+            );
+
+            Route::get(
+                '/vehicles/{vehicle}/positions',
+                [VehiclePositionController::class, 'history']
+            );
+
+            /*
+    |--------------------------------------------------------------------------
+    | CRUD Vehicle Position
+    |--------------------------------------------------------------------------
+    */
+            Route::apiResource(
+                'vehicle-positions',
+                VehiclePositionController::class
+            );
         });
     });
