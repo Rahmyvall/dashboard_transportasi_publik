@@ -4,9 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthApiController;
-use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\RouteController;
+use App\Http\Controllers\Api\RouteStopController;
+use App\Http\Controllers\Api\StopController;
+use App\Http\Controllers\Api\TransportModeController;
 use App\Http\Controllers\Api\UserController;
 
 Route::prefix('v1')
@@ -55,5 +58,41 @@ Route::prefix('v1')
 
             Route::apiResource('roles', RoleController::class);
             Route::apiResource('users', UserController::class);
+            Route::apiResource('operators', OperatorController::class);
+            Route::apiResource(
+                'transport-modes',
+                TransportModeController::class
+            );
+            Route::patch(
+                'routes/{id}/restore',
+                [RouteController::class, 'restore']
+            )->whereNumber('id');
+
+            Route::delete(
+                'routes/{id}/force',
+                [RouteController::class, 'forceDelete']
+            )->whereNumber('id');
+
+            Route::apiResource(
+                'routes',
+                RouteController::class
+            );
+            Route::patch(
+                '/stops/{stop}/status',
+                [StopController::class, 'updateStatus']
+            );
+
+            Route::apiResource('/stops', StopController::class);
+            Route::patch(
+                '/routes/{route}/route-stops/reorder',
+                [RouteStopController::class, 'reorder']
+            );
+
+            Route::apiResource(
+                'route-stops',
+                RouteStopController::class
+            )->parameters([
+                'route-stops' => 'routeStop',
+            ]);
         });
     });

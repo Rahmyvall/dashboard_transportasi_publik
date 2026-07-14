@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             OperatorSeeder::class,
             TripSeeder::class,
+            TransportModeSeeder::class,
         ]);
 
         $role = DB::table('roles')
