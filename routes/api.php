@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RouteController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Api\RouteStopController;
 use App\Http\Controllers\Api\StopController;
 use App\Http\Controllers\Api\TransportModeController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VehicleController;
 
 Route::prefix('v1')
     ->name('api.v1.')
@@ -94,5 +96,55 @@ Route::prefix('v1')
             )->parameters([
                 'route-stops' => 'routeStop',
             ]);
+            Route::prefix('vehicles')
+                ->name('vehicles.')
+                ->group(function () {
+                    Route::post(
+                        '{vehicle}/restore',
+                        [VehicleController::class, 'restore']
+                    )->name('restore');
+
+                    Route::delete(
+                        '{vehicle}/force',
+                        [VehicleController::class, 'forceDestroy']
+                    )->name('force-destroy');
+                });
+
+            /*
+|--------------------------------------------------------------------------
+| Detail Vehicle
+|--------------------------------------------------------------------------
+| withTrashed memungkinkan detail kendaraan yang sudah di-soft-delete
+| tetap dapat ditampilkan.
+*/
+            Route::get(
+                'vehicles/{vehicle}',
+                [VehicleController::class, 'show']
+            )
+                ->withTrashed()
+                ->name('vehicles.show');
+
+            Route::apiResource(
+                'vehicles',
+                VehicleController::class
+            )->except([
+                'show',
+            ]);
+            Route::get('/drivers/trashed', [
+                DriverController::class,
+                'trashed',
+            ]);
+
+            Route::patch('/drivers/{id}/restore', [
+                DriverController::class,
+                'restore',
+            ])->whereNumber('id');
+
+            Route::delete('/drivers/{id}/force', [
+                DriverController::class,
+                'forceDelete',
+            ])->whereNumber('id');
+
+            Route::apiResource('drivers', DriverController::class);
         });
     });
