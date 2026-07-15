@@ -50,4 +50,12 @@ class User extends Authenticatable
     {
         return $query->where('status', 'aktif');
     }
+
+    public function reportedIncidents()
+    {
+        return $this->hasMany(
+            Incident::class,
+            'reported_by'
+        );
+    }
 }

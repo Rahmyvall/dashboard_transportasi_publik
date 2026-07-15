@@ -151,16 +151,82 @@
 
                 <ul class="sub-menu">
 
-                     <li><a href="#" class="text-white-50">GPS Armada</a></li>
-                     <li><a href="#" class="text-white-50">Keterlambatan</a></li>
-                     <li><a href="#" class="text-white-50">Kepadatan</a>
+
+                     {{-- GPS Armada --}}
+                     <li>
+                          <a href="{{ route('admin.vehicle-positions.index') }}" class="text-white-50">
+
+                               <i class="ri-map-pin-line"></i>
+                               GPS Armada
+
+                          </a>
                      </li>
 
-                     <li><a href="#" class="text-white-50">Insiden</a></li>
-                     <li><a href="#" class="text-white-50">Alert</a></li>
 
-                     <li><a href="#" class="text-white-50">Notifikasi</a>
+
+                     {{-- Keterlambatan --}}
+                     <li>
+                          <a href="{{ route('admin.trips.history') }}" class="text-white-50">
+
+                               <i class="ri-time-line"></i>
+                               Keterlambatan
+
+                          </a>
                      </li>
+
+
+
+                     {{-- Kepadatan --}}
+                     <li>
+                          <a href="{{ route('admin.passenger-counts.index') }}" class="text-white-50">
+
+                               <i class="ri-group-line"></i>
+                               Kepadatan
+
+                          </a>
+                     </li>
+
+
+
+
+                     {{-- Insiden --}}
+                     <li>
+                          <a href="{{ route('admin.incidents.index') }}" class="text-white-50">
+
+                               <i class="ri-error-warning-line"></i>
+                               Insiden
+
+                          </a>
+                     </li>
+
+
+
+
+                     {{-- Alert --}}
+                     <li>
+                          <a href="{{ route('admin.incidents.index', ['severity' => 'critical']) }}"
+                               class="text-white-50">
+
+                               <i class="ri-alarm-warning-line"></i>
+                               Alert
+
+                          </a>
+                     </li>
+
+
+
+
+
+                     {{-- Notifikasi --}}
+                     <li>
+                          <a href="#" class="text-white-50">
+
+                               <i class="ri-notification-3-line"></i>
+                               Notifikasi
+
+                          </a>
+                     </li>
+
 
                 </ul>
            </li>

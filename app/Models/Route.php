@@ -259,4 +259,12 @@ class Route extends Model
             'route_id'
         );
     }
+
+    public function incidents()
+    {
+        return $this->hasMany(
+            Incident::class,
+            'route_id'
+        );
+    }
 }

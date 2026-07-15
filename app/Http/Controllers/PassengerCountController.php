@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\PassengerCount;
+use App\Models\Stop;
 use App\Models\Trip;
 use App\Models\Vehicle;
-use App\Models\Stop;
 use Illuminate\Http\Request;
 
 class PassengerCountController extends Controller
 {
-
 
     /**
      * Menampilkan data passenger count
@@ -24,7 +23,7 @@ class PassengerCountController extends Controller
 
             'vehicle',
 
-            'stop'
+            'stop',
 
         ])
 
@@ -32,11 +31,7 @@ class PassengerCountController extends Controller
 
             ->paginate(10);
 
-
-
         $title = "Monitoring Penumpang";
-
-
 
         return view(
             'admin.passenger-counts.index',
@@ -47,27 +42,18 @@ class PassengerCountController extends Controller
         );
     }
 
-
-
-
-
     /**
      * Form tambah data
      */
     public function create()
     {
 
-
         $title = "Tambah Data Passenger Count";
-
-
 
         $trips = Trip::orderBy(
             'id',
             'desc'
         )->get();
-
-
 
         $vehicles = Vehicle::whereNull(
             'deleted_at'
@@ -79,9 +65,6 @@ class PassengerCountController extends Controller
 
             ->get();
 
-
-
-
         $stops = Stop::where(
             'is_active',
             true
@@ -92,11 +75,6 @@ class PassengerCountController extends Controller
             )
 
             ->get();
-
-
-
-
-
 
         return view(
 
@@ -117,94 +95,67 @@ class PassengerCountController extends Controller
         );
     }
 
-
-
-
-
-
-
-
     /**
      * Simpan data
      */
     public function store(Request $request)
     {
 
-
         $validated = $request->validate([
 
-
-
-            'trip_id' => [
+            'trip_id'          => [
 
                 'required',
 
-                'exists:trips,id'
+                'exists:trips,id',
 
             ],
 
-
-
-            'vehicle_id' => [
+            'vehicle_id'       => [
 
                 'required',
 
-                'exists:vehicles,id'
+                'exists:vehicles,id',
 
             ],
 
-
-
-
-            'stop_id' => [
+            'stop_id'          => [
 
                 'nullable',
 
-                'exists:stops,id'
+                'exists:stops,id',
 
             ],
 
-
-
-
-            'boarding_count' => [
+            'boarding_count'   => [
 
                 'required',
 
                 'integer',
 
-                'min:0'
+                'min:0',
 
             ],
 
-
-
-
-            'alighting_count' => [
+            'alighting_count'  => [
 
                 'required',
 
                 'integer',
 
-                'min:0'
+                'min:0',
 
             ],
 
-
-
-
-            'current_load' => [
+            'current_load'     => [
 
                 'required',
 
                 'integer',
 
-                'min:0'
+                'min:0',
 
             ],
-
-
-
 
             'vehicle_capacity' => [
 
@@ -212,33 +163,21 @@ class PassengerCountController extends Controller
 
                 'integer',
 
-                'min:0'
+                'min:0',
 
             ],
 
-
-
-
-            'recorded_at' => [
+            'recorded_at'      => [
 
                 'required',
 
-                'date'
+                'date',
 
             ],
 
-
         ]);
 
-
-
-
-
         PassengerCount::create($validated);
-
-
-
-
 
         return redirect()
 
@@ -255,14 +194,6 @@ class PassengerCountController extends Controller
             );
     }
 
-
-
-
-
-
-
-
-
     /**
      * Detail data
      */
@@ -270,10 +201,7 @@ class PassengerCountController extends Controller
         PassengerCount $passengerCount
     ) {
 
-
         $title = "Detail Passenger Count";
-
-
 
         $passengerCount->load([
 
@@ -281,14 +209,9 @@ class PassengerCountController extends Controller
 
             'vehicle',
 
-            'stop'
+            'stop',
 
         ]);
-
-
-
-
-
 
         return view(
 
@@ -305,14 +228,6 @@ class PassengerCountController extends Controller
         );
     }
 
-
-
-
-
-
-
-
-
     /**
      * Form edit
      */
@@ -320,26 +235,13 @@ class PassengerCountController extends Controller
         PassengerCount $passengerCount
     ) {
 
-
         $title = "Edit Passenger Count";
-
-
 
         $trips = Trip::all();
 
-
-
         $vehicles = Vehicle::all();
 
-
-
         $stops = Stop::all();
-
-
-
-
-
-
 
         return view(
 
@@ -362,14 +264,6 @@ class PassengerCountController extends Controller
         );
     }
 
-
-
-
-
-
-
-
-
     /**
      * Update data
      */
@@ -381,57 +275,29 @@ class PassengerCountController extends Controller
 
     ) {
 
-
-
         $validated = $request->validate([
 
+            'trip_id'          => 'required|exists:trips,id',
 
+            'vehicle_id'       => 'required|exists:vehicles,id',
 
-            'trip_id' => 'required|exists:trips,id',
+            'stop_id'          => 'nullable|exists:stops,id',
 
+            'boarding_count'   => 'required|integer|min:0',
 
+            'alighting_count'  => 'required|integer|min:0',
 
-            'vehicle_id' => 'required|exists:vehicles,id',
-
-
-
-            'stop_id' => 'nullable|exists:stops,id',
-
-
-
-            'boarding_count' => 'required|integer|min:0',
-
-
-
-            'alighting_count' => 'required|integer|min:0',
-
-
-
-            'current_load' => 'required|integer|min:0',
-
-
+            'current_load'     => 'required|integer|min:0',
 
             'vehicle_capacity' => 'nullable|integer|min:0',
 
-
-
-            'recorded_at' => 'required|date',
-
-
+            'recorded_at'      => 'required|date',
 
         ]);
-
-
-
-
 
         $passengerCount->update(
             $validated
         );
-
-
-
-
 
         return redirect()
 
@@ -448,14 +314,6 @@ class PassengerCountController extends Controller
             );
     }
 
-
-
-
-
-
-
-
-
     /**
      * Hapus data
      */
@@ -463,14 +321,7 @@ class PassengerCountController extends Controller
         PassengerCount $passengerCount
     ) {
 
-
-
         $passengerCount->delete();
-
-
-
-
-
 
         return redirect()
 

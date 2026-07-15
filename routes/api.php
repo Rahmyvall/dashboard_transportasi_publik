@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\DriverController;
+use App\Http\Controllers\Api\IncidentController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RouteController;
@@ -210,6 +211,50 @@ Route::prefix('v1')
             Route::apiResource(
                 'tickets',
                 TicketController::class
+            );
+            /*
+|--------------------------------------------------------------------------
+| INCIDENT MANAGEMENT
+|--------------------------------------------------------------------------
+*/
+
+
+            Route::get(
+                'incidents/statistics',
+                [
+                    IncidentController::class,
+                    'statistics'
+                ]
+            )
+                ->name('incidents.statistics');
+
+
+
+            Route::get(
+                'incidents/open',
+                [
+                    IncidentController::class,
+                    'open'
+                ]
+            )
+                ->name('incidents.open');
+
+
+
+            Route::get(
+                'incidents/critical',
+                [
+                    IncidentController::class,
+                    'critical'
+                ]
+            )
+                ->name('incidents.critical');
+
+
+
+            Route::apiResource(
+                'incidents',
+                IncidentController::class
             );
         });
     });

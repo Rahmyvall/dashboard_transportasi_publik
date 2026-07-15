@@ -10,16 +10,9 @@ class Vehicle extends Model
 {
     use HasFactory, SoftDeletes;
 
-
-
     protected $table = 'vehicles';
 
-
-
     protected $primaryKey = 'id';
-
-
-
 
     protected $fillable = [
 
@@ -43,43 +36,27 @@ class Vehicle extends Model
 
     ];
 
-
-
-
-
-
-
     /*
     |--------------------------------------------------------------------------
     | CAST
     |--------------------------------------------------------------------------
     */
 
-
     protected $casts = [
 
-        'capacity' => 'integer',
+        'capacity'          => 'integer',
 
-        'manufacture_year' => 'integer',
+        'manufacture_year'  => 'integer',
 
         'last_service_date' => 'date',
 
     ];
-
-
-
-
-
-
-
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONSHIP
     |--------------------------------------------------------------------------
     */
-
-
 
     /**
      * Kendaraan milik operator
@@ -98,17 +75,10 @@ class Vehicle extends Model
         )
             ->withDefault([
 
-                'name' => 'Tidak Ada Operator'
+                'name' => 'Tidak Ada Operator',
 
             ]);
     }
-
-
-
-
-
-
-
 
     /**
      * Jenis transportasi
@@ -127,17 +97,10 @@ class Vehicle extends Model
         )
             ->withDefault([
 
-                'name' => 'Tidak Ada Mode'
+                'name' => 'Tidak Ada Mode',
 
             ]);
     }
-
-
-
-
-
-
-
 
     /**
      * Satu kendaraan memiliki banyak trip
@@ -156,13 +119,6 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
-
-
-
     /**
      * Satu kendaraan memiliki banyak jadwal
      */
@@ -179,13 +135,6 @@ class Vehicle extends Model
 
         );
     }
-
-
-
-
-
-
-
 
     /**
      * Monitoring jumlah penumpang
@@ -204,13 +153,6 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
-
-
-
     /**
      * Tiket kendaraan
      */
@@ -228,20 +170,11 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
-
-
-
     /*
     |--------------------------------------------------------------------------
     | QUERY SCOPE
     |--------------------------------------------------------------------------
     */
-
-
 
     public function scopeAvailable($query)
     {
@@ -252,10 +185,6 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
     public function scopeOnTrip($query)
     {
 
@@ -264,10 +193,6 @@ class Vehicle extends Model
             'on_trip'
         );
     }
-
-
-
-
 
     public function scopeMaintenance($query)
     {
@@ -278,10 +203,6 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
     public function scopeInactive($query)
     {
 
@@ -291,13 +212,6 @@ class Vehicle extends Model
         );
     }
 
-
-
-
-
-
-
-
     /**
      * Search kendaraan
      */
@@ -306,9 +220,7 @@ class Vehicle extends Model
         $keyword
     ) {
 
-
         return $query->where(function ($q) use ($keyword) {
-
 
             $q->where(
 
@@ -319,7 +231,6 @@ class Vehicle extends Model
                 "%{$keyword}%"
 
             )
-
 
                 ->orWhere(
 
@@ -333,20 +244,11 @@ class Vehicle extends Model
         });
     }
 
-
-
-
-
-
-
-
     /*
     |--------------------------------------------------------------------------
     | ACCESSOR
     |--------------------------------------------------------------------------
     */
-
-
 
     /**
      * Nomor kendaraan tampil
@@ -354,19 +256,10 @@ class Vehicle extends Model
     public function getVehicleNumberAttribute()
     {
 
-        return $this->plate_number
-
-            ??
+        return $this->plate_number ??
 
             $this->vehicle_code;
     }
-
-
-
-
-
-
-
 
     /**
      * Status Indonesia
@@ -374,37 +267,20 @@ class Vehicle extends Model
     public function getStatusLabelAttribute()
     {
 
-
         return match ($this->status) {
 
+            'available'   => 'Tersedia',
 
-            'available'
-            => 'Tersedia',
+            'on_trip'     => 'Dalam Perjalanan',
 
+            'maintenance' => 'Perawatan',
 
-            'on_trip'
-            => 'Dalam Perjalanan',
-
-
-            'maintenance'
-            => 'Perawatan',
-
-
-            'inactive'
-            => 'Tidak Aktif',
-
+            'inactive'    => 'Tidak Aktif',
 
             default
             => 'Tidak Diketahui'
         };
     }
-
-
-
-
-
-
-
 
     /**
      * Warna badge
@@ -412,37 +288,28 @@ class Vehicle extends Model
     public function getStatusColorAttribute()
     {
 
-
         return match ($this->status) {
 
+            'available'   => 'success',
 
-            'available'
-            => 'success',
+            'on_trip'     => 'primary',
 
+            'maintenance' => 'warning',
 
-            'on_trip'
-            => 'primary',
-
-
-            'maintenance'
-            => 'warning',
-
-
-            'inactive'
-            => 'danger',
-
+            'inactive'    => 'danger',
 
             default
             => 'secondary'
         };
     }
 
-
-
-
-
-
-
+    public function incidents()
+    {
+        return $this->hasMany(
+            Incident::class,
+            'vehicle_id'
+        );
+    }
 
     /**
      * Kapasitas kendaraan
@@ -455,19 +322,11 @@ class Vehicle extends Model
             : '-';
     }
 
-
-
-
-
-
-
-
     /*
     |--------------------------------------------------------------------------
     | HELPER
     |--------------------------------------------------------------------------
     */
-
 
     public function isAvailable(): bool
     {
@@ -475,26 +334,17 @@ class Vehicle extends Model
         return $this->status === 'available';
     }
 
-
-
-
     public function isOnTrip(): bool
     {
 
         return $this->status === 'on_trip';
     }
 
-
-
-
     public function isMaintenance(): bool
     {
 
         return $this->status === 'maintenance';
     }
-
-
-
 
     public function isInactive(): bool
     {
