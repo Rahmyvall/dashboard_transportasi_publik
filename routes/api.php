@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\AlertApiController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\IncidentController;
@@ -17,6 +15,8 @@ use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\VehiclePositionController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
     ->name('api.v1.')
@@ -47,9 +47,9 @@ Route::prefix('v1')
 
             Route::get('me', function (Request $request) {
                 return response()->json([
-                    'status' => true,
+                    'status'  => true,
                     'message' => 'User profile',
-                    'data' => $request->user(),
+                    'data'    => $request->user(),
                 ]);
             })->name('me');
 
@@ -218,43 +218,74 @@ Route::prefix('v1')
 |--------------------------------------------------------------------------
 */
 
-
             Route::get(
                 'incidents/statistics',
                 [
                     IncidentController::class,
-                    'statistics'
+                    'statistics',
                 ]
             )
                 ->name('incidents.statistics');
-
-
 
             Route::get(
                 'incidents/open',
                 [
                     IncidentController::class,
-                    'open'
+                    'open',
                 ]
             )
                 ->name('incidents.open');
-
-
 
             Route::get(
                 'incidents/critical',
                 [
                     IncidentController::class,
-                    'critical'
+                    'critical',
                 ]
             )
                 ->name('incidents.critical');
-
-
 
             Route::apiResource(
                 'incidents',
                 IncidentController::class
             );
+            /*
+|--------------------------------------------------------------------------
+| ALERT MANAGEMENT
+|--------------------------------------------------------------------------
+*/
+
+            Route::get(
+                'alerts/statistics',
+                [
+                    AlertApiController::class,
+                    'statistics',
+                ]
+            )
+                ->name('alerts.statistics');
+
+            Route::get(
+                'alerts/published',
+                [
+                    AlertApiController::class,
+                    'published',
+                ]
+            )
+                ->name('alerts.published');
+
+            Route::get(
+                'alerts/critical',
+                [
+                    AlertApiController::class,
+                    'critical',
+                ]
+            )
+                ->name('alerts.critical');
+
+            Route::apiResource(
+                'alerts',
+                AlertApiController::class
+            );
+
         });
     });

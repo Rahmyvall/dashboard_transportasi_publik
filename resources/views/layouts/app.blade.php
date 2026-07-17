@@ -138,69 +138,188 @@
                               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                    aria-labelledby="page-header-notifications-dropdown">
 
+
                                    <div class="p-3">
+
                                         <div class="row align-items-center">
+
                                              <div class="col">
-                                                  <h6 class="m-0">Notifications</h6>
+
+                                                  <h6 class="m-0">
+                                                       Notifications
+                                                  </h6>
+
                                              </div>
+
+
                                              <div class="col-auto">
-                                                  <a href="#!" class="small">View All</a>
+
+                                                  <a href="{{ route('admin.alerts.index') }}" class="small">
+
+                                                       View All
+
+                                                  </a>
+
                                              </div>
+
+
                                         </div>
+
                                    </div>
 
-                                   <div data-simplebar style="max-height: 230px;">
-                                        <a href="#" class="text-reset notification-item">
-                                             <div class="d-flex">
-                                                  <div class="avatar-xs me-3">
-                                                       <span
-                                                            class="avatar-title bg-primary rounded-circle font-size-16">
-                                                            <i class="ri-shopping-cart-line"></i>
-                                                       </span>
-                                                  </div>
-                                                  <div class="flex-1">
-                                                       <h6 class="mb-1">Your order is placed</h6>
-                                                       <div class="font-size-12 text-muted">
-                                                            <p class="mb-1">If several languages coalesce the grammar
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                 <i class="mdi mdi-clock-outline"></i> 3 min ago
-                                                            </p>
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                        </a>
 
-                                        <a href="#" class="text-reset notification-item">
-                                             <div class="d-flex">
-                                                  <div class="avatar-xs me-3">
-                                                       <span
-                                                            class="avatar-title bg-success rounded-circle font-size-16">
-                                                            <i class="ri-checkbox-circle-line"></i>
-                                                       </span>
-                                                  </div>
-                                                  <div class="flex-1">
-                                                       <h6 class="mb-1">Your item is shipped</h6>
-                                                       <div class="font-size-12 text-muted">
-                                                            <p class="mb-1">If several languages coalesce the grammar
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                 <i class="mdi mdi-clock-outline"></i> 3 min ago
-                                                            </p>
+
+
+                                   <div data-simplebar style="max-height:230px;">
+
+
+                                        @forelse($notifications as $alert)
+                                             <a href="{{ route('admin.alerts.show', $alert->id) }}"
+                                                  class="text-reset notification-item">
+
+
+                                                  <div class="d-flex">
+
+
+                                                       <div class="avatar-xs me-3">
+
+
+                                                            @php
+
+                                                                 $icon = match ($alert->alert_type) {
+                                                                     'emergency' => 'ri-alarm-warning-line',
+
+                                                                     'delay' => 'ri-time-line',
+
+                                                                     'diversion' => 'ri-road-map-line',
+
+                                                                     'service_stop' => 'ri-stop-circle-line',
+
+                                                                     'crowded' => 'ri-group-line',
+
+                                                                     default => 'ri-information-line',
+                                                                 };
+
+                                                                 $color = match ($alert->priority) {
+                                                                     'critical' => 'danger',
+
+                                                                     'high' => 'warning',
+
+                                                                     'medium' => 'primary',
+
+                                                                     default => 'success',
+                                                                 };
+
+                                                            @endphp
+
+
+
+                                                            <span
+                                                                 class="avatar-title bg-{{ $color }} rounded-circle font-size-16">
+
+
+                                                                 <i class="{{ $icon }}"></i>
+
+
+                                                            </span>
+
+
                                                        </div>
+
+
+
+
+
+                                                       <div class="flex-1">
+
+
+                                                            <h6 class="mb-1">
+
+                                                                 {{ $alert->title }}
+
+                                                            </h6>
+
+
+
+                                                            <div class="font-size-12 text-muted">
+
+
+                                                                 <p class="mb-1">
+
+                                                                      {{ Str::limit($alert->message, 60) }}
+
+                                                                 </p>
+
+
+
+                                                                 <p class="mb-0">
+
+                                                                      <i class="mdi mdi-clock-outline"></i>
+
+                                                                      {{ $alert->created_at->diffForHumans() }}
+
+                                                                 </p>
+
+
+                                                            </div>
+
+
+                                                       </div>
+
+
                                                   </div>
+
+
+                                             </a>
+
+
+
+                                        @empty
+
+
+                                             <div class="text-center p-3 text-muted">
+
+                                                  <i class="ri-notification-off-line"></i>
+
+                                                  <br>
+
+                                                  Tidak ada notifikasi
+
                                              </div>
-                                        </a>
+                                        @endforelse
+
+
+
                                    </div>
+
+
+
+
 
                                    <div class="p-2 border-top">
+
+
                                         <div class="d-grid">
+
+
                                              <a class="btn btn-sm btn-link font-size-14 text-center"
-                                                  href="javascript:void(0)">
-                                                  <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
+                                                  href="{{ route('admin.alerts.index') }}">
+
+
+                                                  <i class="mdi mdi-arrow-right-circle me-1"></i>
+
+                                                  View More
+
+
                                              </a>
+
+
                                         </div>
+
+
                                    </div>
+
+
 
                               </div>
                          </div>

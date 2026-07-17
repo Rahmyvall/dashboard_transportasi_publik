@@ -22,6 +22,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AlertController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehiclePositionController;
 use Illuminate\Support\Facades\Route;
@@ -417,5 +418,24 @@ Route::middleware('web')
                     'incidents',
                     IncidentController::class
                 );
+
+                Route::resource(
+                    'alerts',
+                    AlertController::class
+                );
+
+
+                Route::post(
+                    'alerts/{id}/publish',
+                    [AlertController::class, 'publish']
+                )
+                    ->name('alerts.publish');
+
+
+                Route::post(
+                    'alerts/{id}/expire',
+                    [AlertController::class, 'expire']
+                )
+                    ->name('alerts.expire');
             });
     });

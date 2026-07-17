@@ -219,10 +219,20 @@
 
                      {{-- Notifikasi --}}
                      <li>
-                          <a href="#" class="text-white-50">
+                          <a href="{{ route('admin.alerts.index') }}" class="text-white-50 position-relative">
 
                                <i class="ri-notification-3-line"></i>
                                Notifikasi
+
+                               @php
+                                    $totalAlert = \App\Models\Alert::published()->count();
+                               @endphp
+
+                               @if ($totalAlert > 0)
+                                    <span class="badge bg-danger rounded-pill">
+                                         {{ $totalAlert }}
+                                    </span>
+                               @endif
 
                           </a>
                      </li>

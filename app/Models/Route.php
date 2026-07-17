@@ -1,63 +1,71 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Route extends Model
 {
+
     use HasFactory, SoftDeletes;
 
-
     protected $table = 'routes';
-
 
     protected $fillable = [
 
         'operator_id',
+
         'transport_mode_id',
+
         'route_code',
+
         'route_name',
+
         'origin',
+
         'destination',
+
         'distance_km',
+
         'estimated_duration_minutes',
+
         'status',
 
     ];
 
-
     protected $casts = [
 
-        'operator_id' => 'integer',
+        'operator_id'                => 'integer',
 
-        'transport_mode_id' => 'integer',
+        'transport_mode_id'          => 'integer',
 
-        'distance_km' => 'decimal:2',
+        'distance_km'                => 'decimal:2',
 
         'estimated_duration_minutes' => 'integer',
 
-        'status' => 'string',
-
-        'deleted_at' => 'datetime',
+        'deleted_at'                 => 'datetime',
 
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | CONSTANT STATUS
+    |--------------------------------------------------------------------------
+    */
 
+    public const STATUS_ACTIVE =
+        'active';
 
-    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE =
+        'inactive';
 
-    public const STATUS_INACTIVE = 'inactive';
-
-    public const STATUS_MAINTENANCE = 'maintenance';
-
-
+    public const STATUS_MAINTENANCE =
+        'maintenance';
 
     public static function getStatuses(): array
     {
@@ -71,12 +79,17 @@ class Route extends Model
             self::STATUS_MAINTENANCE,
 
         ];
+
     }
 
-
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONSHIP
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Operator pemilik route
+     * Operator
      */
     public function operator(): BelongsTo
     {
@@ -85,12 +98,11 @@ class Route extends Model
             Operator::class,
             'operator_id'
         );
+
     }
 
-
-
     /**
-     * Jenis transportasi
+     * Transport Mode
      */
     public function transportMode(): BelongsTo
     {
@@ -99,10 +111,26 @@ class Route extends Model
             TransportMode::class,
             'transport_mode_id'
         );
+
     }
 
     /**
-     * Jadwal route
+     * Alert Notification
+     *
+     * Relasi penting untuk tabel alerts
+     */
+    public function alerts(): HasMany
+    {
+
+        return $this->hasMany(
+            Alert::class,
+            'route_id'
+        );
+
+    }
+
+    /**
+     * Schedule
      */
     public function schedules(): HasMany
     {
@@ -111,12 +139,11 @@ class Route extends Model
             Schedule::class,
             'route_id'
         );
+
     }
 
-
-
     /**
-     * Trip route
+     * Trip
      */
     public function trips(): HasMany
     {
@@ -125,12 +152,11 @@ class Route extends Model
             Trip::class,
             'route_id'
         );
+
     }
 
-
-
     /**
-     * Detail pemberhentian route
+     * Route Stops Detail
      */
     public function routeStops(): HasMany
     {
@@ -143,12 +169,11 @@ class Route extends Model
                 'stop_order',
                 'asc'
             );
+
     }
 
-
-
     /**
-     * Relasi many to many stop
+     * Many to Many Stops
      */
     public function stops(): BelongsToMany
     {
@@ -176,55 +201,74 @@ class Route extends Model
                 'stop_order',
                 'asc'
             );
+
     }
 
+    /**
+     * Ticket
+     */
+    public function tickets(): HasMany
+    {
 
+        return $this->hasMany(
+            Ticket::class,
+            'route_id'
+        );
+
+    }
 
     /**
-     * Scope route aktif
+     * Incident
      */
-    public function scopeActive(Builder $query): Builder
+    public function incidents(): HasMany
     {
+
+        return $this->hasMany(
+            Incident::class,
+            'route_id'
+        );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeActive(
+        Builder $query
+    ): Builder {
 
         return $query->where(
             'status',
             self::STATUS_ACTIVE
         );
+
     }
 
-
-
-    /**
-     * Scope route tidak aktif
-     */
-    public function scopeInactive(Builder $query): Builder
-    {
+    public function scopeInactive(
+        Builder $query
+    ): Builder {
 
         return $query->where(
             'status',
             self::STATUS_INACTIVE
         );
+
     }
 
-
-
-    /**
-     * Scope maintenance
-     */
-    public function scopeMaintenance(Builder $query): Builder
-    {
+    public function scopeMaintenance(
+        Builder $query
+    ): Builder {
 
         return $query->where(
             'status',
             self::STATUS_MAINTENANCE
         );
+
     }
 
-
-
-    /**
-     * Filter operator
-     */
     public function scopeByOperator(
         Builder $query,
         int $operatorId
@@ -234,13 +278,9 @@ class Route extends Model
             'operator_id',
             $operatorId
         );
+
     }
 
-
-
-    /**
-     * Filter transport mode
-     */
     public function scopeByTransportMode(
         Builder $query,
         int $transportModeId
@@ -250,21 +290,99 @@ class Route extends Model
             'transport_mode_id',
             $transportModeId
         );
+
     }
 
-    public function tickets()
-    {
-        return $this->hasMany(
-            Ticket::class,
-            'route_id'
-        );
+    /**
+     * Search Route
+     */
+    public function scopeSearch(
+        Builder $query,
+        string $keyword
+    ): Builder {
+
+        return $query->where(function ($q) use ($keyword) {
+
+            $q->where(
+                'route_code',
+                'like',
+                "%{$keyword}%"
+            )
+
+                ->orWhere(
+                    'route_name',
+                    'like',
+                    "%{$keyword}%"
+                )
+
+                ->orWhere(
+                    'origin',
+                    'like',
+                    "%{$keyword}%"
+                )
+
+                ->orWhere(
+                    'destination',
+                    'like',
+                    "%{$keyword}%"
+                );
+
+        });
+
     }
 
-    public function incidents()
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Compatibility dengan Alert Blade
+     *
+     * {{ $alert->route->name }}
+     */
+    public function getNameAttribute()
     {
-        return $this->hasMany(
-            Incident::class,
-            'route_id'
-        );
+
+        return $this->route_name;
+
     }
+
+    /**
+     * Status Label
+     */
+    public function getStatusLabelAttribute()
+    {
+
+        return match ($this->status) {
+
+            self::STATUS_ACTIVE      =>
+            'Active',
+
+            self::STATUS_INACTIVE    =>
+            'Inactive',
+
+            self::STATUS_MAINTENANCE =>
+            'Maintenance',
+
+            default                  =>
+            '-',
+
+        };
+
+    }
+
+    /**
+     * Full Route Name
+     */
+    public function getFullRouteAttribute()
+    {
+
+        return $this->origin
+        . ' → ' .
+        $this->destination;
+
+    }
+
 }

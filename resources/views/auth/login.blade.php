@@ -345,55 +345,85 @@
                          </div>
 
                          {{-- KPI CARDS --}}
+                         {{-- KPI SUMMARY --}}
                          <div class="row g-3 mb-4">
 
+                              {{-- ARMADA AKTIF --}}
                               <div class="col-md-4">
                                    <div class="kpi-card p-4 h-100">
+
                                         <div class="icon-box mb-3">
                                              <i class="ri-bus-2-line"></i>
                                         </div>
 
                                         <h3 class="fw-bold mb-1">
-                                             1.248
+                                             {{ number_format($activeVehicles ?? 0) }}
                                         </h3>
 
                                         <p class="text-soft small mb-0">
                                              Armada Aktif
                                         </p>
+
                                    </div>
                               </div>
 
+
+                              {{-- TOTAL PENUMPANG --}}
                               <div class="col-md-4">
                                    <div class="kpi-card p-4 h-100">
+
                                         <div class="icon-box mb-3">
                                              <i class="ri-group-line"></i>
                                         </div>
 
                                         <h3 class="fw-bold mb-1">
-                                             1.2M
+
+                                             @php
+                                                  $passengers = $totalPassengers ?? 0;
+                                             @endphp
+
+                                             @if ($passengers >= 1000000)
+                                                  {{ number_format($passengers / 1000000, 1) }}M
+                                             @elseif($passengers >= 1000)
+                                                  {{ number_format($passengers / 1000, 1) }}K
+                                             @else
+                                                  {{ number_format($passengers) }}
+                                             @endif
+
                                         </h3>
+
 
                                         <p class="text-soft small mb-0">
                                              Total Penumpang
                                         </p>
+
                                    </div>
                               </div>
 
+
+
+                              {{-- ON TIME RATE --}}
                               <div class="col-md-4">
                                    <div class="kpi-card p-4 h-100">
+
                                         <div class="icon-box mb-3">
                                              <i class="ri-time-line"></i>
                                         </div>
 
+
                                         <h3 class="fw-bold mb-1">
-                                             92%
+                                             {{ number_format($onTimeRate ?? 0, 0) }}%
                                         </h3>
+
 
                                         <p class="text-soft small mb-0">
                                              On-Time Rate
                                         </p>
+
+
                                    </div>
                               </div>
+
 
                          </div>
 
