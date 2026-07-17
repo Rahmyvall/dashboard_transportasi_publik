@@ -213,10 +213,6 @@
                           </a>
                      </li>
 
-
-
-
-
                      {{-- Notifikasi --}}
                      <li>
                           <a href="{{ route('admin.alerts.index') }}" class="text-white-50 position-relative">
@@ -251,11 +247,25 @@
                 </a>
 
                 <ul class="sub-menu">
+                     <li>
+                          <a href="{{ route('admin.maintenance-logs.index') }}" class="text-white-50">
+                               Perawatan
+                          </a>
+                     </li>
 
-                     <li><a href="#" class="text-white-50">Perawatan</a></li>
-                     <li><a href="#" class="text-white-50">Jadwal</a></li>
-                     <li><a href="#" class="text-white-50">Riwayat</a></li>
+                     <li>
+                          <a href="{{ route('admin.maintenance-logs.index', ['status' => 'scheduled']) }}"
+                               class="text-white-50">
+                               Jadwal
+                          </a>
+                     </li>
 
+                     <li>
+                          <a href="{{ route('admin.maintenance-logs.index', ['status' => 'completed']) }}"
+                               class="text-white-50">
+                               Riwayat
+                          </a>
+                     </li>
                 </ul>
            </li>
 

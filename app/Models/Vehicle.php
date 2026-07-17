@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -258,7 +257,7 @@ class Vehicle extends Model
 
         return $this->plate_number ??
 
-            $this->vehicle_code;
+        $this->vehicle_code;
     }
 
     /**
@@ -278,7 +277,7 @@ class Vehicle extends Model
             'inactive'    => 'Tidak Aktif',
 
             default
-            => 'Tidak Diketahui'
+                          => 'Tidak Diketahui'
         };
     }
 
@@ -299,7 +298,7 @@ class Vehicle extends Model
             'inactive'    => 'danger',
 
             default
-            => 'secondary'
+                          => 'secondary'
         };
     }
 
@@ -350,5 +349,10 @@ class Vehicle extends Model
     {
 
         return $this->status === 'inactive';
+    }
+
+    public function maintenanceLogs()
+    {
+        return $this->hasMany(MaintenanceLog::class);
     }
 }

@@ -13,16 +13,17 @@ use App\Http\Controllers\Admin\RouteStopController;
 use App\Http\Controllers\Admin\ScheduleController as AdminScheduleController;
 use App\Http\Controllers\Admin\StopController;
 use App\Http\Controllers\Admin\TransportModeController;
+use App\Http\Controllers\AlertController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
+use App\Http\Controllers\MaintenanceLogController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\PassengerCountController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AlertController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VehiclePositionController;
 use Illuminate\Support\Facades\Route;
@@ -424,18 +425,21 @@ Route::middleware('web')
                     AlertController::class
                 );
 
-
                 Route::post(
                     'alerts/{id}/publish',
                     [AlertController::class, 'publish']
                 )
                     ->name('alerts.publish');
 
-
                 Route::post(
                     'alerts/{id}/expire',
                     [AlertController::class, 'expire']
                 )
                     ->name('alerts.expire');
+                Route::resource(
+                    'maintenance-logs',
+                    MaintenanceLogController::class
+                );
+
             });
     });
