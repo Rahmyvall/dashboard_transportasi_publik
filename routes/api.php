@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AlertApiController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\DriverController;
 use App\Http\Controllers\Api\IncidentController;
+use App\Http\Controllers\Api\MaintenanceLogController;
 use App\Http\Controllers\Api\OperatorController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\RouteController;
@@ -285,6 +286,10 @@ Route::prefix('v1')
             Route::apiResource(
                 'alerts',
                 AlertApiController::class
+            );
+            Route::apiResource(
+                'maintenance-logs',
+                MaintenanceLogController::class
             );
 
         });
